@@ -1,18 +1,17 @@
-
-import i18next from 'i18next';
-import * as leoProfanity from 'leo-profanity';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
-import App from './App.jsx';
-import resources from './locales/index.js';
-import store from './slices/index.js';
-import { SockeIoProvider } from './contexts/SocketContext.jsx';
+import i18next from "i18next";
+import * as leoProfanity from "leo-profanity";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { Provider as RollbarProvider, ErrorBoundary } from "@rollbar/react";
+import App from "./App.jsx";
+import resources from "./locales/index.js";
+import store from "./slices/index.js";
+import { SockeIoProvider } from "./contexts/SocketContext.jsx";
 
 const init = async (socketInstance) => {
   const i18n = i18next.createInstance();
-  const ruDictionary = leoProfanity.getDictionary('ru');
+  const ruDictionary = leoProfanity.getDictionary("ru");
   leoProfanity.add(ruDictionary);
 
   const rollbarConfig = {
@@ -20,12 +19,10 @@ const init = async (socketInstance) => {
     environment: process.env.NODE_ENV,
   };
 
-  await i18n
-    .use(initReactI18next)
-    .init({
-      resources,
-      fallbackLng: localStorage.language ? localStorage.language : 'ru',
-    });
+  await i18n.use(initReactI18next).init({
+    resources,
+    fallbackLng: localStorage.language ? localStorage.language : "ru",
+  });
 
   return (
     <Provider store={store}>
@@ -41,7 +38,6 @@ const init = async (socketInstance) => {
         </ErrorBoundary>
       </RollbarProvider>
     </Provider>
-
   );
 };
 

@@ -1,7 +1,6 @@
-
-import NavBar from '../common-components/navbar/NavBar.jsx';
-import Channels from './components/channels/Channels.jsx';
-import Chat from './components/chat/Chat';
+import NavBar from "../common-components/navbar/NavBar.jsx";
+import Channels from "./components/channels/Channels.jsx";
+import Chat from "./components/chat/Chat";
 
 const Main = () => (
   <div className="d-flex flex-column h-100">

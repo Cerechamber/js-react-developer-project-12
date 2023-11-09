@@ -1,19 +1,20 @@
-
-import {
-  createContext, useContext, useMemo, useState,
-} from 'react';
+import { createContext, useContext, useMemo, useState } from "react";
 
 const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null);
+  const [user, setUser] = useState(
+    localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user"))
+      : null
+  );
 
   const logIn = (data) => {
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem("user", JSON.stringify(data));
     setUser(data);
   };
   const logOut = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
     setUser(null);
   };
 
@@ -24,18 +25,17 @@ const AuthProvider = ({ children }) => {
     return {};
   };
 
-  const value = useMemo(() => ({
-    user,
-    logIn,
-    logOut,
-    getAuthHeader,
-  }), [user]);
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      logIn,
+      logOut,
+      getAuthHeader,
+    }),
+    [user]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 const useAuth = () => useContext(AuthContext);

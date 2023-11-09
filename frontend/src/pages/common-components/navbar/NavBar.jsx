@@ -1,14 +1,13 @@
-
-import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useAuth } from '../../../contexts/AuthContext.jsx';
-import routes from '../../../routes.js';
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import { useAuth } from "../../../contexts/AuthContext.jsx";
+import routes from "../../../routes.js";
 
 const LogOutButton = () => {
   const { logOut } = useAuth();
@@ -24,7 +23,7 @@ const LogOutButton = () => {
       type="button"
       className="btn btn-primary"
     >
-      {t('navbar.logOutButton')}
+      {t("navbar.logOutButton")}
     </button>
   );
 };
@@ -37,8 +36,8 @@ const NavBar = () => {
   const currentLanguage = i18n.language;
 
   const handleSwitchLanguage = () => {
-    changeLanguage(currentLanguage === 'ru' ? 'en' : 'ru');
-    localStorage.language = currentLanguage === 'ru' ? 'en' : 'ru';
+    changeLanguage(currentLanguage === "ru" ? "en" : "ru");
+    localStorage.language = currentLanguage === "ru" ? "en" : "ru";
   };
 
   return (
@@ -46,23 +45,33 @@ const NavBar = () => {
       <div className="container">
         <Row>
           <Col>
-            <Link className="navbar-brand" to={path}>{t('navbar.mainLabel')}</Link>
+            <Link className="navbar-brand" to={path}>
+              {t("navbar.mainLabel")}
+            </Link>
           </Col>
         </Row>
         <Row>
           <ButtonGroup>
             {user ? <LogOutButton /> : null}
-            {
-              user
-                ? (
-                  <DropdownButton variant="outline-secondary" as={ButtonGroup} title={currentLanguage} id="bg-nested-dropdown">
-                    <Dropdown.Item onClick={handleSwitchLanguage} eventKey="1">
-                      {currentLanguage === 'ru' ? 'English' : 'Russian'}
-                    </Dropdown.Item>
-                  </DropdownButton>
-                )
-                : <Button onClick={handleSwitchLanguage} variant="outline-secondary">{currentLanguage}</Button>
-            }
+            {user ? (
+              <DropdownButton
+                variant="outline-secondary"
+                as={ButtonGroup}
+                title={currentLanguage}
+                id="bg-nested-dropdown"
+              >
+                <Dropdown.Item onClick={handleSwitchLanguage} eventKey="1">
+                  {currentLanguage === "ru" ? "English" : "Russian"}
+                </Dropdown.Item>
+              </DropdownButton>
+            ) : (
+              <Button
+                onClick={handleSwitchLanguage}
+                variant="outline-secondary"
+              >
+                {currentLanguage}
+              </Button>
+            )}
           </ButtonGroup>
         </Row>
       </div>
