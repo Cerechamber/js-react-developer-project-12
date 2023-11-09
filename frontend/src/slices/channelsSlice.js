@@ -4,18 +4,18 @@ import {
   createAsyncThunk,
   createSelector,
   createSlice,
-} from "@reduxjs/toolkit";
-import axios from "axios";
-import routes from "../routes";
+} from '@reduxjs/toolkit';
+import axios from 'axios';
+import routes from '../routes';
 
 export const loadingProcess = {
-  IDLE: "IDLE",
-  LOADING: "LOADING",
-  FAILING: "FAILING",
+  IDLE: 'IDLE',
+  LOADING: 'LOADING',
+  FAILING: 'FAILING',
 };
 
 export const fetchContent = createAsyncThunk(
-  "channels/fetchContent",
+  'channels/fetchContent',
   async (getAuthHeader) => {
     const { data } = await axios.get(routes.contentPath(), {
       headers: getAuthHeader(),
@@ -25,10 +25,10 @@ export const fetchContent = createAsyncThunk(
 );
 
 const channelsSlice = createSlice({
-  name: "channels",
+  name: 'channels',
   initialState: {
     channels: [],
-    currentChannelId: "",
+    currentChannelId: '',
     loadingStatus: loadingProcess.IDLE,
     error: null,
   },
