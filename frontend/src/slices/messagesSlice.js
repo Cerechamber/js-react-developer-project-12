@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import {
   deleteChannel,
   fetchContent,
   selectCurrentChannelId,
-} from './channelsSlice';
+} from "./channelsSlice";
 
 const messagesSlice = createSlice({
-  name: 'messages',
+  name: "messages",
   initialState: {
     messages: [],
   },

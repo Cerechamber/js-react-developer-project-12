@@ -1,10 +1,10 @@
-import { Routes, Route } from 'react-router-dom';
-import Login from '../pages/login/Login.jsx';
-import Notfound from '../pages/notfound/Notfound.jsx';
-import Signup from '../pages/signup/Signup.jsx';
-import routes from '../routes.js';
-import PrivateRoute from './PrivateRoute.jsx';
-import Main from '../pages/main/Main.jsx';
+import { Routes, Route } from "react-router-dom";
+import Login from "../pages/login/Login.jsx";
+import Notfound from "../pages/notfound/Notfound.jsx";
+import Signup from "../pages/signup/Signup.jsx";
+import routes from "../routes.js";
+import PrivateRoute from "./PrivateRoute.jsx";
+import Main from "../pages/main/Main.jsx";
 
 const AppRouter = () => (
   <Routes>
@@ -17,7 +17,7 @@ const AppRouter = () => (
     <Route path={routes.signupPagePath()} element={<PrivateRoute />}>
       <Route path={routes.signupPagePath()} element={<Signup />} />
     </Route>
-    <Route path='*' element={<Notfound />} />
+    <Route path="*" element={<Notfound />} />
   </Routes>
 );
 
