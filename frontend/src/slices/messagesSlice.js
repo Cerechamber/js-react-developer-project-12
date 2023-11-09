@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { deleteChannel, fetchContent, selectCurrentChannelId } from './channelsSlice';
 

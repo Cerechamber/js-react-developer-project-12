@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import axios from 'axios';
 import { useFormik } from 'formik';
 import Button from 'react-bootstrap/Button';

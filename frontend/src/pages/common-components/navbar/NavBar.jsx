@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';

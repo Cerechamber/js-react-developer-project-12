@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import Form from 'react-bootstrap/Form';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';

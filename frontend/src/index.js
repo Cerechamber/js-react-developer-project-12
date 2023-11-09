@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import ReactDOM from 'react-dom/client';
 import { io } from 'socket.io-client';
 import init from './init.jsx';

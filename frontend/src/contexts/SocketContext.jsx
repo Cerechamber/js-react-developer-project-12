@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import {
   createContext, useContext, useEffect, useMemo,
 } from 'react';

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../routes';

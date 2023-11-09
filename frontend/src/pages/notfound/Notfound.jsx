@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import NavBar from '../common-components/navbar/NavBar.jsx';

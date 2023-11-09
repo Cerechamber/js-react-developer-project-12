@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 export default {
   translation: {
     loader: 'Loading...',

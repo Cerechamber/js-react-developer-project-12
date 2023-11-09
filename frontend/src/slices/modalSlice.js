@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const modalSlice = createSlice({

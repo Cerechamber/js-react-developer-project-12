@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { useSelector } from 'react-redux';
 import { selectModalState } from '../../../slices/modalSlice.js';
 import Add from './Add.jsx';

@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { Routes, Route } from 'react-router-dom';
 import Login from '../pages/login/Login.jsx';
 import Notfound from '../pages/notfound/Notfound.jsx';

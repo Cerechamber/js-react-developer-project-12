@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 const apiPath = '/api/v1';
 
 export default {

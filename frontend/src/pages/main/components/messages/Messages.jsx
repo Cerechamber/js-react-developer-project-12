@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { useSelector } from 'react-redux';
 import { selectCurrentChannelMessages } from '../../../../slices/messagesSlice';
 

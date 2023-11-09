@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import NavBar from '../common-components/navbar/NavBar.jsx';
 import Channels from './components/channels/Channels.jsx';
 import Chat from './components/chat/Chat';

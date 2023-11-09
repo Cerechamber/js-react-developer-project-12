@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { useEffect, useRef } from 'react';

@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import { configureStore } from '@reduxjs/toolkit';
 import channelsReducer from './channelsSlice.js';
 import messagesReducer from './messagesSlice.js';

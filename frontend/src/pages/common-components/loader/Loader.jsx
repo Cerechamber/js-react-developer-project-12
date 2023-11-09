@@ -1,4 +1,4 @@
-/* eslint linebreak-style: ["error", "windows"] */
+
 import Spinner from 'react-bootstrap/Spinner';
 import { useTranslation } from 'react-i18next';
 
