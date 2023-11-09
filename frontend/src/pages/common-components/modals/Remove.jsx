@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import CloseButton from 'react-bootstrap/CloseButton';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { useSocket } from '../../../contexts/SocketContext.jsx';
-import { hideModal, selectModalState } from '../../../slices/modalSlice.js';
+import { useTranslation } from "react-i18next";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import CloseButton from "react-bootstrap/CloseButton";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { useSocket } from "../../../contexts/SocketContext.jsx";
+import { hideModal, selectModalState } from "../../../slices/modalSlice.js";
 
 const Remove = () => {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ const Remove = () => {
       setIsRemoved(true);
       await removeChannel({ id: remoteChannelId });
       handleHideModal();
-      toast.success(t('notifications.success.channelRemoved'));
+      toast.success(t("notifications.success.channelRemoved"));
     } catch (error) {
       setIsRemoved(false);
       console.log(error);
@@ -36,30 +36,30 @@ const Remove = () => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>{t('modals.removeChannel.header')}</Modal.Title>
+        <Modal.Title>{t("modals.removeChannel.header")}</Modal.Title>
         <CloseButton
           onClick={handleHideModal}
-          aria-label='Close'
-          data-bs-dismiss='modal'
+          aria-label="Close"
+          data-bs-dismiss="modal"
         />
       </Modal.Header>
       <Modal.Body>
-        <p className='lead'>{t('modals.removeChannel.body')}</p>
-        <div className='d-flex justify-content-end'>
+        <p className="lead">{t("modals.removeChannel.body")}</p>
+        <div className="d-flex justify-content-end">
           <Button
             onClick={handleHideModal}
-            variant='secondary'
-            className='me-2'
+            variant="secondary"
+            className="me-2"
             disabled={isRemoved}
           >
-            {t('modals.removeChannel.cancelButton')}
+            {t("modals.removeChannel.cancelButton")}
           </Button>
           <Button
             onClick={handleRemoveChannel}
-            variant='danger'
+            variant="danger"
             disabled={isRemoved}
           >
-            {t('modals.removeChannel.removeButton')}
+            {t("modals.removeChannel.removeButton")}
           </Button>
         </div>
       </Modal.Body>
