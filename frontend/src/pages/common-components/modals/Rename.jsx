@@ -1,17 +1,17 @@
-import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import { useRef, useEffect } from "react";
-import * as Yup from "yup";
-import * as leoProfanity from "leo-profanity";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import CloseButton from "react-bootstrap/CloseButton";
-import { toast } from "react-toastify";
-import { hideModal, selectModalState } from "../../../slices/modalSlice.js";
-import { selectChannelNames } from "../../../slices/channelsSlice.js";
-import { useSocket } from "../../../contexts/SocketContext.jsx";
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import { useRef, useEffect } from 'react';
+import * as Yup from 'yup';
+import * as leoProfanity from 'leo-profanity';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import CloseButton from 'react-bootstrap/CloseButton';
+import { toast } from 'react-toastify';
+import { hideModal, selectModalState } from '../../../slices/modalSlice.js';
+import { selectChannelNames } from '../../../slices/channelsSlice.js';
+import { useSocket } from '../../../contexts/SocketContext.jsx';
 
 const Rename = () => {
   const { t } = useTranslation();
@@ -37,15 +37,11 @@ const Rename = () => {
     validateOnChange: false,
     validateOnBlur: false,
     validationSchema: Yup.object().shape({
-      name: Yup.string()
-        .trim()
-        .required("modals.renameChannel.validation.requiredField")
-        .min(3, "modals.renameChannel.validation.channelNameLength")
-        .max(20, "modals.renameChannel.validation.channelNameLength")
-        .notOneOf(
-          channelNames,
-          "modals.renameChannel.validation.channelNameExists"
-        ),
+      name: Yup.string().trim()
+        .required('modals.renameChannel.validation.requiredField')
+        .min(3, 'modals.renameChannel.validation.channelNameLength')
+        .max(20, 'modals.renameChannel.validation.channelNameLength')
+        .notOneOf(channelNames, 'modals.renameChannel.validation.channelNameExists'),
     }),
     onSubmit: async (values, { resetForm }) => {
       const renamedChannel = {
@@ -57,7 +53,7 @@ const Rename = () => {
         await handleRenameChannel(renamedChannel);
         resetForm();
         handleHideModal();
-        toast.success(t("notifications.success.channelRenamed"));
+        toast.success(t('notifications.success.channelRenamed'));
       } catch (error) {
         formik.setSubmitting(false);
         console.log(error);
@@ -72,12 +68,8 @@ const Rename = () => {
   return (
     <>
       <Modal.Header>
-        <Modal.Title>{t("modals.renameChannel.header")}</Modal.Title>
-        <CloseButton
-          onClick={handleHideModal}
-          aria-label="Close"
-          data-bs-dismiss="modal"
-        />
+        <Modal.Title>{t('modals.renameChannel.header')}</Modal.Title>
+        <CloseButton onClick={handleHideModal} aria-label="Close" data-bs-dismiss="modal" />
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -94,23 +86,11 @@ const Rename = () => {
                 autoComplete="off"
                 value={formik.values.name}
               />
-              <Form.Label className="visually-hidden" htmlFor="name">
-                {t("modals.renameChannel.inputLabel")}
-              </Form.Label>
-              <Form.Control.Feedback type="invalid">
-                {t(formik.errors.name)}
-              </Form.Control.Feedback>
+              <Form.Label className="visually-hidden" htmlFor="name">{t('modals.renameChannel.inputLabel')}</Form.Label>
+              <Form.Control.Feedback type="invalid">{t(formik.errors.name)}</Form.Control.Feedback>
               <div className="d-flex justify-content-end">
-                <Button
-                  onClick={handleHideModal}
-                  variant="secondary"
-                  className="me-2"
-                >
-                  {t("modals.renameChannel.cancelButton")}
-                </Button>
-                <Button type="submit">
-                  {t("modals.renameChannel.submitButton")}
-                </Button>
+                <Button onClick={handleHideModal} variant="secondary" className="me-2">{t('modals.renameChannel.cancelButton')}</Button>
+                <Button type="submit">{t('modals.renameChannel.submitButton')}</Button>
               </div>
             </Form.Group>
           </fieldset>
