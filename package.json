@@ -1,0 +1,22 @@
+{
+  "name": "@hexlet/code.",
+  "version": "1.0.0",
+  "description": "slack chat react",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cerechamber/js-react-developer-project-12.git"
+  },
+  "author": "Alex",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cerechamber/js-react-developer-project-12/issues"
+  },
+  "homepage": "https://github.com/Cerechamber/js-react-developer-project-12#readme",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.4"
+  }
+}
