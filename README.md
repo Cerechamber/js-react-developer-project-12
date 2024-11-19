@@ -1,6 +1,6 @@
 # [React App boilerplate](https://deploy-1-k7ln.onrender.com/)
 
-It's an example of a customized react-project with a backend-server. You can copy it to start developing chat project.
+It's the react-project with a backend-server.
 
 ## Requirements
 
