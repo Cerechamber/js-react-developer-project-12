@@ -1,9 +1,9 @@
-import React from "react";
-
-const Slack = () => {
+const Slack = ({ token }) => {
     return (
+        <>
         <div>asdf</div>
+        </>
     )
 }
 
-export default Slack;
+export default Slack

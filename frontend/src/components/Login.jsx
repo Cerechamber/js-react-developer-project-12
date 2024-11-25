@@ -1,50 +1,48 @@
-import React from "react";
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-
-const SignupSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(5, 'Минимум 5 символа')
-      .max(25, 'Максимум 25 символов')
-      .required('Обязательное поле'),
-    password: Yup.string()
-      .min(2, 'Минимум 2 символа')
-      .max(50, 'Максимум 50 символов')
-      .required('Обязательное поле')
-  });
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Formik, Form, Field } from 'formik'
+import axios from 'axios'
   
-  const Login = () => {
+  const Login = ({ dispatch, setUser }) => {
+    const [error, setError] = useState(false)
     return (
-        <div>
-      <h1>Signup</h1>
+        <>
+      <h1>Войти</h1>
       <Formik
         initialValues={{
-          firstName: '',
+          nick: '',
           password: '',
-          sku: ''
         }}
-        validationSchema={SignupSchema}
         onSubmit={ (values) => {
           console.log(values);
+          axios.post('/api/v1/login',
+          { username: values.nick, password: values.password })
+          .then((res) => {
+            setError(false)
+            dispatch(setUser(res))
+
+            console.log(res.data)
+          }).catch(function (err) {
+             if (err.status === 401) {
+              setError(true)
+             }
+          });
         }}
       >
-        {({ errors, touched }) => (
           <Form>
-            <Field name="firstName" />
-            {errors.firstName && touched.firstName ? (
-              <div>{errors.firstName}</div>
-            ) : null}
-            <Field name="password" />
-            {errors.password && touched.password ? (
-              <div>{errors.password}</div>
-            ) : null}
-            <button type="submit">Submit</button>
+            <Field name="nick" required />
+            <Field name="password" required />
+            { error ? 
+            <div>Неверные имя пользователя или пароль</div>
+            : null
+            }
+            <button type="submit">Войти</button>
           </Form>
-        )}
       </Formik>
-    </div>
+      <Link to='/reg'>Зарегистрироваться</Link>
+    </>
     )
     
 };
 
-export default Login;
+export default Login
