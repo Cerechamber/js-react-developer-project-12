@@ -1,9 +1,9 @@
-const Slack = ({ token }) => {
-    return (
-        <>
-        <div>asdf</div>
-        </>
-    )
-}
+const Slack = () => {
+  return (
+    <>
+      <div>asdf</div>
+    </>
+  );
+};
 
-export default Slack
+export default Slack;
