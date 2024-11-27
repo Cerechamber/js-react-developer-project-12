@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -17,8 +16,7 @@ const SignupSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
 });
 
-const Reg = ({ dispatch, setUser }) => {
-  const navigate = useNavigate();
+const Reg = ({ dispatch, setUser, navigate }) => {
   return (
     <div>
       <h1>Регистрация</h1>

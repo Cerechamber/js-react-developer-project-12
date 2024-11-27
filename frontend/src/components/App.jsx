@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actions } from "../reducers/authReducer";
+import Layout from "./Layout";
 import Slack from "./Slack";
 import Login from "./Login";
 import Reg from "./Reg";
@@ -24,16 +25,18 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Slack />} />
+      <Route path="/" element={<Layout dispatch={dispatch} setUser={actions.setUser} navigate={navigate} />} >
+      <Route index element={<Slack />} />
       <Route
         path="/login"
-        element={<Login dispatch={dispatch} setUser={actions.setUser} />}
+        element={<Login dispatch={dispatch} setUser={actions.setUser} navigate={navigate} />}
       />
       <Route
         path="/reg"
-        element={<Reg dispatch={dispatch} setUser={actions.setUser} />}
+        element={<Reg dispatch={dispatch} setUser={actions.setUser} navigate={navigate} />}
       />
       <Route path="*" element={<NotFound />} />
+      </Route>
     </Routes>
   );
 }
