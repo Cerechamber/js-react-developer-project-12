@@ -1,20 +1,22 @@
-body, html, #root {
-    height: 100%;
+body,
+html,
+#root {
+  height: 100%;
 }
 
 .auth__img {
-    max-height: 62vh;
+  max-height: 62vh;
 }
 
 @media (max-width: 767px) {
-    .auth__img {
-        max-height: 30vh;
-        margin-bottom: 1rem;
-    }
-    .chat {
-        justify-content: flex-start !important;
-    }
-    .footer {
-        margin-top: auto;
-    }
+  .auth__img {
+    max-height: 30vh;
+    margin-bottom: 1rem;
+  }
+  .chat {
+    justify-content: flex-start !important;
+  }
+  .footer {
+    margin-top: auto;
+  }
 }

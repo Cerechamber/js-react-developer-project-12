@@ -1,63 +1,174 @@
-import { Formik, Form, Field } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
+import {
+  Button,
+  Row,
+  Col,
+  Container,
+  Card,
+  Form,
+  FloatingLabel,
+} from "react-bootstrap";
 import axios from "axios";
+import tunnel from "../assets/tunnel.png";
 
- const passwordMatch = /^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=\D*\d)(?=[^!#%]*[!#%])[A-Za-z0-9!#%]{8,32}$/;
+const passwordMatch =
+  /^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=\D*\d)(?=[^!#%]*[!#%])[A-Za-z0-9!#%]{8,32}$/;
 
 const SignupSchema = Yup.object().shape({
-  nick: Yup.string().required('Обязательное поле')
-    .min(4, 'Минимум 4 символа')
-    .max(25, 'Максимум 25 символов'),
+  nick: Yup.string()
+    .required("Обязательное поле")
+    .min(4, "Минимум 4 символа")
+    .max(25, "Максимум 25 символов"),
   password: Yup.string()
-    .min(8, 'Минимум 8 символов').required('Обязательное поле')
-    .max(32, 'Максимум 32 символов')
-    .matches(passwordMatch, 'Введите корректный пароль'),
-    passwordConfirm: Yup.string().required('Обязательное поле')
-    .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
+    .min(8, "Минимум 8 символов")
+    .required("Обязательное поле")
+    .max(32, "Максимум 32 символов")
+    .matches(passwordMatch, "Введите корректный пароль"),
+  passwordConfirm: Yup.string()
+    .required("Обязательное поле")
+    .oneOf([Yup.ref("password"), null], "Пароли должны совпадать"),
 });
 
 const Reg = ({ dispatch, setUser, navigate }) => {
   return (
-    <div>
-      <h1>Регистрация</h1>
-      <Formik
-        initialValues={{
-          nick: "",
-          password: "",
-          passwordConfirm: ""
-        }}
-        validationSchema={SignupSchema}
-        onSubmit={(values) => {
-          axios.post('/api/v1/signup',
-            { username: values.nick, password: values.password })
-            .then(({ data }) => {
-              dispatch(setUser(data));
-              localStorage.setItem('userToken', data.token);
-              localStorage.setItem('userName', data.username);
-              navigate('/', { replace: false });
-          });
-        }}
-      >
-        {({ errors, touched }) => (
-          <Form>
-            <Field name="nick" />
-            {errors.nick && touched.nick ? (
-              <div>{errors.nick}</div>
-            ) : null}
-            <Field name="password" type="password" />
-            {errors.password && touched.password ? (
-              <div>{errors.password}</div>
-            ) : null}
-            <Field name="passwordConfirm" type="password" />
-            {errors.passwordConfirm && touched.passwordConfirm ? (
-              <div>{errors.passwordConfirm}</div>
-            ) : null}
-            <button type="submit">Submit</button>
-            <div>Пароль должен содержать как минимум 1 букву нижнего регистра, минимум 1 заглавную букву, не менее 1 числа, как минимум 1 специальный символ(!#%). Только латиница.</div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+    <Container fluid={true} className="auth mb-3 mt-3">
+      <Row className="justify-content-center align-items-center">
+        <Col xxl={6} lg={9} md={11}>
+          <Row>
+            <Card className="shadow p-0">
+              <Card.Body>
+                <Row>
+                  <Col md={6}>
+                    <Card.Img
+                      variant="top"
+                      className="auth__img object-fit-cover rounded"
+                      src={tunnel}
+                    />
+                  </Col>
+                  <Col md={6}>
+                    <Row className="flex-column justify-content-center h-100">
+                      <Card.Title className="fs-2 text-center mb-3">
+                        Регистрация
+                      </Card.Title>
+                      <Formik
+                        initialValues={{
+                          nick: "",
+                          password: "",
+                          passwordConfirm: "",
+                        }}
+                        validationSchema={SignupSchema}
+                        onSubmit={(values) => {
+                          axios
+                            .post("/api/v1/signup", {
+                              username: values.nick,
+                              password: values.password,
+                            })
+                            .then(({ data }) => {
+                              dispatch(setUser(data));
+                              localStorage.setItem("userToken", data.token);
+                              localStorage.setItem("userName", data.username);
+                              navigate("/", { replace: false });
+                            });
+                        }}
+                      >
+                        {({
+                          errors,
+                          touched,
+                          values,
+                          handleChange,
+                          handleSubmit,
+                        }) => (
+                          <Form onSubmit={handleSubmit}>
+                            <FloatingLabel
+                              controlId="nickAuth"
+                              label="Ваш ник"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type="text"
+                                name="nick"
+                                placeholder="Ваш ник"
+                                onChange={handleChange}
+                                value={values.nick}
+                                isInvalid={errors.nick && touched.nick}
+                                isValid={!errors.nick && touched.nick}
+                              />
+                              <Form.Control.Feedback type="invalid">
+                                {errors.nick}
+                              </Form.Control.Feedback>
+                            </FloatingLabel>
+
+                            <FloatingLabel
+                              controlId="passwordAuth"
+                              label="Пароль"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type="password"
+                                name="password"
+                                placeholder="Пароль"
+                                onChange={handleChange}
+                                value={values.password}
+                                isInvalid={errors.password && touched.password}
+                                isValid={!errors.password && touched.password}
+                              />
+                              <Form.Control.Feedback type="invalid">
+                                {errors.password}
+                              </Form.Control.Feedback>
+                            </FloatingLabel>
+
+                            <FloatingLabel
+                              controlId="passwordAuthConfirm"
+                              label="Подтвердите пароль"
+                              className="mb-3"
+                            >
+                              <Form.Control
+                                type="password"
+                                name="passwordConfirm"
+                                placeholder="Подтвердите пароль"
+                                onChange={handleChange}
+                                value={values.passwordConfirm}
+                                isInvalid={
+                                  errors.passwordConfirm &&
+                                  touched.passwordConfirm
+                                }
+                                isValid={
+                                  !errors.passwordConfirm &&
+                                  touched.passwordConfirm
+                                }
+                              />
+                              <Form.Control.Feedback type="invalid">
+                                {errors.passwordConfirm}
+                              </Form.Control.Feedback>
+                            </FloatingLabel>
+
+                            <Button
+                              variant="info"
+                              className="w-100 mt-3"
+                              type="submit"
+                            >
+                              Зарегистрироваться
+                            </Button>
+                          </Form>
+                        )}
+                      </Formik>
+                    </Row>
+                  </Col>
+                </Row>
+              </Card.Body>
+              <Card.Footer className="text-center pt-3 pb-2">
+                <Card.Subtitle className="mb-0">
+                  Пароль должен содержать как минимум 1 букву нижнего регистра,
+                  минимум 1 заглавную букву, не менее 1 числа, как минимум 1
+                  специальный символ(!#%). Только латиница.
+                </Card.Subtitle>
+              </Card.Footer>
+            </Card>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

@@ -1,9 +1,9 @@
 const NotFound = () => {
   return (
     <div className="NotFound">
-    <div className="NotFound__self">упс, кажется не туда</div>
-  </div>
-  )
+      <div className="NotFound__self">упс, кажется не туда</div>
+    </div>
+  );
 };
 
 export default NotFound;

@@ -15,27 +15,48 @@ function App() {
   const dispatch = useDispatch();
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
-    if ((!userToken) && location.pathname === '/') {
+    if (!userToken && location.pathname === "/") {
       navigate("/login", { replace: true });
     } else {
       const userName = localStorage.getItem("userName");
-      dispatch(actions.setUser({name: userName, token: userToken}));
+      dispatch(actions.setUser({ name: userName, token: userToken }));
     }
   });
 
   return (
     <Routes>
-      <Route path="/" element={<Layout dispatch={dispatch} setUser={actions.setUser} navigate={navigate} />} >
-      <Route index element={<Slack />} />
       <Route
-        path="/login"
-        element={<Login dispatch={dispatch} setUser={actions.setUser} navigate={navigate} />}
-      />
-      <Route
-        path="/reg"
-        element={<Reg dispatch={dispatch} setUser={actions.setUser} navigate={navigate} />}
-      />
-      <Route path="*" element={<NotFound />} />
+        path="/"
+        element={
+          <Layout
+            dispatch={dispatch}
+            setUser={actions.setUser}
+            navigate={navigate}
+          />
+        }
+      >
+        <Route index element={<Slack />} />
+        <Route
+          path="/login"
+          element={
+            <Login
+              dispatch={dispatch}
+              setUser={actions.setUser}
+              navigate={navigate}
+            />
+          }
+        />
+        <Route
+          path="/reg"
+          element={
+            <Reg
+              dispatch={dispatch}
+              setUser={actions.setUser}
+              navigate={navigate}
+            />
+          }
+        />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
