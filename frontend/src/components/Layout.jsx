@@ -19,7 +19,7 @@ const Layout = ({ dispatch, setUser, navigate }) => {
           <Container>
             <Link
               to="/"
-              className="text-info-emphasis fs-4 fw-semibold text-decoration-none"
+              className="text-info-emphasis fs-4 fw-semibold text-decoration-none pt-2 pb-2"
             >
               React Slack Chat
             </Link>

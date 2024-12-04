@@ -1,3 +1,4 @@
+import panks from "../assets/panks.png";
 const Slack = () => {
   return (
     <>

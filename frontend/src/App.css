@@ -10,7 +10,7 @@ html,
 
 @media (max-width: 767px) {
   .auth__img {
-    max-height: 30vh;
+    max-height: 16vh;
     margin-bottom: 1rem;
   }
   .chat {

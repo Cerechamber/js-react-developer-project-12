@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import axios from "axios";
+import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import tunnel from "../assets/tunnel.png";
 import {
@@ -16,36 +17,14 @@ import {
 
 const Login = ({ dispatch, setUser, navigate }) => {
   const [error, setError] = useState(false);
-  const formik = useFormik({
-    initialValues: {
-      nick: "",
-      password: "",
-    },
-    onSubmit: (values) => {
-      axios
-        .post("/api/v1/login", {
-          username: values.nick,
-          password: values.password,
-        })
-        .then(({ data }) => {
-          setError(false);
-          dispatch(setUser(data));
-          localStorage.setItem("userToken", data.token);
-          localStorage.setItem("userName", data.username);
-          navigate("/", { replace: false });
-        })
-        .catch(function (err) {
-          if (err.status === 401) {
-            setError(true);
-          }
-        });
-    },
+  const AuthSchema = Yup.object().shape({
+    nick: Yup.string().required("Обязательное поле"),
+    password: Yup.string().required("Обязательное поле"),
   });
   return (
     <Container fluid={true} className="auth mb-3 mt-3">
       <Row className="justify-content-center align-items-center">
-        <Col xxl={6} lg={9} md={11}>
-          <Row>
+        <Col xxl={6} lg={9} md={12}>
             <Card className="shadow p-0">
               <Card.Body>
                 <Row>
@@ -61,50 +40,93 @@ const Login = ({ dispatch, setUser, navigate }) => {
                       <Card.Title className="fs-2 text-center mb-3">
                         Войти
                       </Card.Title>
-                      <Form onSubmit={formik.handleSubmit}>
-                        <FloatingLabel
-                          controlId="nickAuth"
-                          label="Ваш ник"
-                          className="mb-3"
-                        >
-                          <Form.Control
-                            type="text"
-                            name="nick"
-                            required
-                            placeholder="Ваш ник"
-                            onChange={formik.handleChange}
-                            value={formik.values.nick}
-                          />
-                        </FloatingLabel>
-
-                        <FloatingLabel
-                          controlId="passwordAuth"
-                          label="Пароль"
-                          className="mb-3"
-                        >
-                          <Form.Control
-                            type="password"
-                            name="password"
-                            required
-                            placeholder="Пароль"
-                            onChange={formik.handleChange}
-                            value={formik.values.password}
-                          />
-                        </FloatingLabel>
-
-                        {error ? (
-                          <Alert variant="danger">
-                            Неверные имя пользователя или пароль
-                          </Alert>
-                        ) : null}
-                        <Button
-                          variant="info"
-                          className="w-100 mt-3"
-                          type="submit"
-                        >
-                          Войти
-                        </Button>
-                      </Form>
+                      <Formik
+                       initialValues={{
+                        nick: "",
+                        password: "",
+                      }}
+                      validationSchema={AuthSchema}
+                      onSubmit={(values)=>{
+                        axios
+                          .post("/api/v1/login", {
+                            username: values.nick,
+                            password: values.password,
+                          })
+                          .then(({ data }) => {
+                            setError(false);
+                            dispatch(setUser(data));
+                            localStorage.setItem("userToken", data.token);
+                            localStorage.setItem("userName", data.username);
+                            navigate("/", { replace: false });
+                          })
+                          .catch(function (err) {
+                            if (err.status === 401) {
+                              setError(true);
+                            }
+                          });
+                      }}
+                      >
+                        {({
+                          errors,
+                          touched,
+                          values,
+                          handleChange,
+                          handleSubmit,
+                        }) => (
+                          <Form onSubmit={handleSubmit}>
+                          <FloatingLabel
+                            controlId="nickAuth"
+                            label="Ваш ник"
+                            className="mb-3"
+                          >
+                            <Form.Control
+                              type="text"
+                              name="nick"
+                              placeholder="Ваш ник"
+                              onChange={handleChange}
+                              value={values.nick}
+                              isInvalid={errors.nick && touched.nick}
+                              isValid={!errors.nick && touched.nick}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.nick}
+                              </Form.Control.Feedback>
+                          </FloatingLabel>
+  
+                          <FloatingLabel
+                            controlId="passwordAuth"
+                            label="Пароль"
+                            className="mb-3"
+                          >
+                            <Form.Control
+                              type="password"
+                              name="password"
+                              placeholder="Пароль"
+                              onChange={handleChange}
+                              value={values.password}
+                              isInvalid={errors.password && touched.password}
+                              isValid={!errors.password && touched.password}
+                            />
+                              <Form.Control.Feedback type="invalid">
+                                {errors.password}
+                              </Form.Control.Feedback>
+                          </FloatingLabel>
+  
+                          {error ? (
+                            <Alert variant="danger">
+                              Неверные имя пользователя или пароль
+                            </Alert>
+                          ) : null}
+                          <Button
+                            variant="info"
+                            className="w-100 mt-3"
+                            type="submit"
+                          >
+                            Войти
+                          </Button>
+                        </Form>
+                        )}
+                      </Formik>
                     </Row>
                   </Col>
                 </Row>
@@ -114,7 +136,6 @@ const Login = ({ dispatch, setUser, navigate }) => {
                 <Link to="/reg">Зарегистрироваться</Link>
               </Card.Footer>
             </Card>
-          </Row>
         </Col>
       </Row>
     </Container>

@@ -1,5 +1,7 @@
 import { Formik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import tunnel from "../assets/tunnel2.png";
 import {
   Button,
   Row,
@@ -9,8 +11,6 @@ import {
   Form,
   FloatingLabel,
 } from "react-bootstrap";
-import axios from "axios";
-import tunnel from "../assets/tunnel.png";
 
 const passwordMatch =
   /^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=\D*\d)(?=[^!#%]*[!#%])[A-Za-z0-9!#%]{8,32}$/;
@@ -21,10 +21,11 @@ const SignupSchema = Yup.object().shape({
     .min(4, "Минимум 4 символа")
     .max(25, "Максимум 25 символов"),
   password: Yup.string()
-    .min(8, "Минимум 8 символов")
     .required("Обязательное поле")
+    .min(8, "Минимум 8 символов")
     .max(32, "Максимум 32 символов")
-    .matches(passwordMatch, "Введите корректный пароль"),
+    .matches(passwordMatch, `Пароль должен содержать как минимум 1 букву нижнего регистра, минимум
+       1 заглавную букву, не менее 1 числа, как минимум 1 специальный символ(!#%). Только латиница.`),
   passwordConfirm: Yup.string()
     .required("Обязательное поле")
     .oneOf([Yup.ref("password"), null], "Пароли должны совпадать"),
@@ -35,7 +36,6 @@ const Reg = ({ dispatch, setUser, navigate }) => {
     <Container fluid={true} className="auth mb-3 mt-3">
       <Row className="justify-content-center align-items-center">
         <Col xxl={6} lg={9} md={11}>
-          <Row>
             <Card className="shadow p-0">
               <Card.Body>
                 <Row>
@@ -157,15 +157,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                   </Col>
                 </Row>
               </Card.Body>
-              <Card.Footer className="text-center pt-3 pb-2">
-                <Card.Subtitle className="mb-0">
-                  Пароль должен содержать как минимум 1 букву нижнего регистра,
-                  минимум 1 заглавную букву, не менее 1 числа, как минимум 1
-                  специальный символ(!#%). Только латиница.
-                </Card.Subtitle>
-              </Card.Footer>
             </Card>
-          </Row>
         </Col>
       </Row>
     </Container>
