@@ -1,6 +1,7 @@
 import { Formik } from "formik";
+import { Link } from "react-router-dom"; 
 import * as Yup from "yup";
-import axios from "axios";
+import { regUser } from "../chatServer";
 import tunnel from "../assets/tunnel2.png";
 import {
   Button,
@@ -59,17 +60,19 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                         }}
                         validationSchema={SignupSchema}
                         onSubmit={(values) => {
-                          axios
-                            .post("/api/v1/signup", {
-                              username: values.nick,
-                              password: values.password,
-                            })
-                            .then(({ data }) => {
+                          const userData = async () => {
+                            const data = await regUser(values.nick, values.password);
+                            if (data) {
                               dispatch(setUser(data));
-                              localStorage.setItem("userToken", data.token);
-                              localStorage.setItem("userName", data.username);
-                              navigate("/", { replace: false });
-                            });
+                            localStorage.setItem("userToken", data.token);
+                            localStorage.setItem("userName", data.username);
+                            navigate("/", { replace: false });
+                            } else {
+                              console.log('Запустите сервер');
+                            }
+                            
+                          }
+                          userData();
                         }}
                       >
                         {({
@@ -157,6 +160,10 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                   </Col>
                 </Row>
               </Card.Body>
+              <Card.Footer className="text-center pt-3 pb-2">
+              <Card.Subtitle className="mb-0">Вспомнился пароль?</Card.Subtitle>
+                <Link to="/login">Авторизоваться</Link>
+              </Card.Footer>
             </Card>
         </Col>
       </Row>

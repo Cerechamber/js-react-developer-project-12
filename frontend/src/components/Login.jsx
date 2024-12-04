@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Formik } from "formik";
-import axios from "axios";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { authUser } from "../chatServer";
 import tunnel from "../assets/tunnel.png";
 import {
   Button,
@@ -47,23 +47,19 @@ const Login = ({ dispatch, setUser, navigate }) => {
                       }}
                       validationSchema={AuthSchema}
                       onSubmit={(values)=>{
-                        axios
-                          .post("/api/v1/login", {
-                            username: values.nick,
-                            password: values.password,
-                          })
-                          .then(({ data }) => {
+                        const userData = async () => {
+                          const data = await authUser(values.nick, values.password);
+                          if (data) {
                             setError(false);
                             dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
                             localStorage.setItem("userName", data.username);
                             navigate("/", { replace: false });
-                          })
-                          .catch(function (err) {
-                            if (err.status === 401) {
-                              setError(true);
-                            }
-                          });
+                          } else {
+                            setError(true);
+                          }
+                        }
+                        userData();
                       }}
                       >
                         {({

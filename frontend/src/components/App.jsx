@@ -13,8 +13,8 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const userToken = localStorage.getItem("userToken");
   useEffect(() => {
-    const userToken = localStorage.getItem("userToken");
     if (!userToken && location.pathname === "/") {
       navigate("/login", { replace: true });
     } else {
@@ -35,7 +35,13 @@ function App() {
           />
         }
       >
-        <Route index element={<Slack />} />
+        <Route index element={
+          <Slack
+          token={userToken}
+          dispatch={dispatch}
+          />
+        }
+      />
         <Route
           path="/login"
           element={
