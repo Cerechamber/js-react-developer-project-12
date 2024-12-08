@@ -22,16 +22,16 @@ const Login = ({ dispatch, setUser, navigate }) => {
     password: Yup.string().required("Обязательное поле"),
   });
   return (
-    <Container fluid={true} className="auth mb-3 mt-3">
-      <Row className="justify-content-center align-items-center">
-        <Col xxl={6} lg={9} md={12}>
-            <Card className="shadow p-0">
+    <Container fluid={true} className="auth bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
+      <Row className="justify-content-center align-items-center h-100 mx-1 mx-sm-4">
+        <Col xxl={6} lg={8} sm={10} className="h-100">
+            <Card className="shadow p-0 h-100 overflow-auto">
               <Card.Body>
                 <Row>
                   <Col md={6}>
                     <Card.Img
                       variant="top"
-                      className="auth__img object-fit-cover rounded"
+                      className="auth__img object-fit-cover rounded mb-3 mb-sm-0"
                       src={tunnel}
                     />
                   </Col>

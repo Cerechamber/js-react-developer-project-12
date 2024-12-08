@@ -1,22 +1,28 @@
-body,
-html,
-#root {
-  height: 100%;
+.lost {
+  max-height: 65vh;
 }
 
-.auth__img {
-  max-height: 62vh;
-}
-
-@media (max-width: 767px) {
+@media (max-width: 565px) {
   .auth__img {
-    max-height: 16vh;
-    margin-bottom: 1rem;
+    max-height: 18vh;
   }
-  .chat {
-    justify-content: flex-start !important;
+  #messages-box {
+    font-size: .95rem !important;
   }
-  .footer {
-    margin-top: auto;
+  .channels-title {
+    font-size: 1rem !important;
+  }
+  .channels-title + button img {
+    transform: scale(.7);
+  }
+  .form-chat {
+    width: 95vw;
+    transform: translateX(-36%);
+  }
+}
+
+@media (max-width: 360px) {
+  #channel-box button {
+    font-size: .8rem;
   }
 }

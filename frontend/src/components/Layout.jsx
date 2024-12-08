@@ -11,10 +11,9 @@ const Layout = ({ dispatch, setUser, navigate }) => {
   };
   return (
     <div
-      className="d-flex flex-column justify-content-between h-100 chat bg-dark bg-gradient"
+      className="d-flex flex-column h-100 chat bg-dark bg-gradient"
       data-bs-theme="dark"
     >
-      <header className="header">
         <Navbar className="bg-body-tertiary shadow">
           <Container>
             <Link
@@ -31,22 +30,8 @@ const Layout = ({ dispatch, setUser, navigate }) => {
             ) : null}
           </Container>
         </Navbar>
-      </header>
 
       <Outlet />
-
-      <footer className="footer">
-        <Navbar className="bg-body-tertiary">
-          <Container>
-            <Navbar.Brand
-              href="mailto:cerechamber@mail.ru"
-              className="fs-6 text-body-tertiary"
-            >
-              cerechamber@mail.ru
-            </Navbar.Brand>
-          </Container>
-        </Navbar>
-      </footer>
     </div>
   );
 };
