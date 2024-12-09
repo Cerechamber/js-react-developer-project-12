@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import { Formik } from "formik";
+import { actions } from "../reducers/chatReducer";
+import { useSelector } from 'react-redux';
+import { getChannels, getMessages } from "../chatServer";
 import {
   Button,
   Row,
@@ -12,15 +15,25 @@ import {
 import pank from "../assets/pank.png";
 import plus from "../assets/plus.svg"
 import arrow from "../assets/arrow.svg"
-import { getChannels } from "../chatServer";
+
 const Slack = ({dispatch, token}) => {
+  const chat = useSelector(state => state.chatReducer);
+  console.log(chat);
   useEffect(() => {
     const channelsData = async () => {
       const data = await getChannels(token);
-      console.log(data);
+      //console.log(data);
+      dispatch(actions.setChannels(data));
     }
     channelsData();
-  })
+
+    const messagesData = async () => {
+      const data = await getMessages(token);
+      //console.log(data);
+      dispatch(actions.setMessages(data));
+    }
+    messagesData();
+  },[])
   return (
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
       <Row className="justify-content-center shadow-lg h-100 mx-0 mx-sm-4 rounded-3 py-4">
@@ -32,27 +45,18 @@ const Slack = ({dispatch, token}) => {
             </Button>
           </div>
           <ul id="channel-box" className="nav overflow-auto mt-4 d-block">
-            <li className="nav-item">
-            <Button variant="info" className="rounded-0 w-100 text-start"># general</Button>
-            </li>
-            <li className="nav-item">
-              <Button variant="outline-info" className="rounded-0 w-100 text-start border-0"># random</Button>
-            </li>
-            <li className="nav-item">
-              <Button variant="outline-info" className="rounded-0 w-100 text-start border-0"># asfd</Button>
-            </li>
-            <li className="nav-item">
-              <Button variant="outline-info" className="rounded-0 w-100 text-start border-0"># random</Button>
-            </li>
-            <li className="nav-item">
-              <Button variant="outline-info" className="rounded-0 w-100 text-start border-0"># asfd</Button>
-            </li>
-            <li className="nav-item">
-              <Button variant="outline-info" className="rounded-0 w-100 text-start border-0"># random</Button>
-            </li>
-            <li className="nav-item">
-              <Button variant="outline-info" className="rounded-0 w-100 text-start border-0"># asfd</Button>
-            </li>
+            {chat.channels.map(channel => {
+              return (
+                <li className="nav-item" key={channel.id} data-removable={channel.removable}>
+                  <Button variant={channel.id === chat.activeChannel ? 'info' : 'outline-info'}
+                   className="rounded-0 w-100 text-start border-0"
+                   onClick={() => dispatch(actions.setActiveChannel(channel.id))}
+                   >
+                    # {channel.name}
+                  </Button>
+                </li>
+              )
+            })}
           </ul>
         </Col>
         <Col lg={7} md={9} xs={8} className="d-flex flex-column h-100">
@@ -61,21 +65,16 @@ const Slack = ({dispatch, token}) => {
             <div>7 сообщений</div>
           </div>
           <div id="messages-box" className="overflow-auto py-3 px-0 p-sm-4 text-white fs-5 fs-md-6">
-            <div className="text-break mb-3">
-              <span className="fw-bold">Alex</span>:
-              <span className="ms-2">Привет мир!</span>
-            </div>
-            <div className="text-break mb-3">
-              <span className="fw-bold">Alex</span>:
-              <span className="ms-2">Привет мир!Привет мир!Привет мир!Привет мир!Привет мир!
-              Привет мир!Привет мир!Привет мир!Привет мир!Привет мир!
-              Привет мир!Привет мир!Привет мир!Привет мир!Привет мир!
-              </span>
-            </div>
-            <div className="text-break mb-3">
-              <span className="fw-bold">Alex</span>:
-              <span className="ms-2">Привет мир!</span>
-            </div>
+            
+            {/*chat.messages.map(message => {
+                return (
+                  <div className="text-break mb-3" key={message.id}>
+                    <span className="fw-bold">{message.username}</span>:
+                    <span className="ms-2">{message.body}</span>
+                  </div>
+                )
+            })*/}
+
           </div>
 
           <Formik
