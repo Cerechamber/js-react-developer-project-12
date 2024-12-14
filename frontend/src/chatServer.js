@@ -62,6 +62,18 @@ export const getMessages = (token) => {
         body: 'next',
         channelId: '1',
         username: 'faka',
+      },
+      {
+        id: '5',
+        body: 'next111',
+        channelId: '1',
+        username: 'faka',
+      },
+      {
+        id: '6',
+        body: 'next',
+        channelId: '1',
+        username: 'faka',
       }
     ]
     return mess;

@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import { actions } from "../reducers/chatReducer";
 import { useSelector } from 'react-redux';
 import { getChannels, getMessages } from "../chatServer";
+import { numWord } from "../helpers";
 import {
   Button,
   Row,
@@ -17,19 +18,19 @@ import plus from "../assets/plus.svg"
 import arrow from "../assets/arrow.svg"
 
 const Slack = ({dispatch, token}) => {
-  const chat = useSelector(state => state.chatReducer);
-  console.log(chat);
+  const { messages, activeChannel, channels  } = useSelector(state => state.chatReducer);
+
+  console.log(messages, activeChannel, channels);
+
   useEffect(() => {
     const channelsData = async () => {
       const data = await getChannels(token);
-      //console.log(data);
       dispatch(actions.setChannels(data));
     }
     channelsData();
 
     const messagesData = async () => {
       const data = await getMessages(token);
-      //console.log(data);
       dispatch(actions.setMessages(data));
     }
     messagesData();
@@ -45,10 +46,10 @@ const Slack = ({dispatch, token}) => {
             </Button>
           </div>
           <ul id="channel-box" className="nav overflow-auto mt-4 d-block">
-            {chat.channels.map(channel => {
+            {channels.map(channel => {
               return (
                 <li className="nav-item" key={channel.id} data-removable={channel.removable}>
-                  <Button variant={channel.id === chat.activeChannel ? 'info' : 'outline-info'}
+                  <Button variant={channel.id === activeChannel ? 'info' : 'outline-info'}
                    className="rounded-0 w-100 text-start border-0"
                    onClick={() => dispatch(actions.setActiveChannel(channel.id))}
                    >
@@ -61,19 +62,25 @@ const Slack = ({dispatch, token}) => {
         </Col>
         <Col lg={7} md={9} xs={8} className="d-flex flex-column h-100">
           <div className="bg-info p-2 p-sm-3">
-            <div className="fw-bold"># general</div>
-            <div>7 сообщений</div>
+            <div className="fw-bold"># {channels.length ? channels[activeChannel - 1].name : ''}</div>
+            <div>{messages[activeChannel] ?
+             messages[activeChannel].length : ''}
+             {messages[activeChannel] ?
+             numWord(messages[activeChannel].length,
+              [' сообщений', ' сообщение', ' сообщения']) : ''}
+             </div>
           </div>
           <div id="messages-box" className="overflow-auto py-3 px-0 p-sm-4 text-white fs-5 fs-md-6">
             
-            {/*chat.messages.map(message => {
+            {messages[activeChannel] ?
+              messages[activeChannel].map(message => {
                 return (
                   <div className="text-break mb-3" key={message.id}>
                     <span className="fw-bold">{message.username}</span>:
                     <span className="ms-2">{message.body}</span>
                   </div>
                 )
-            })*/}
+            }) : null }
 
           </div>
 
