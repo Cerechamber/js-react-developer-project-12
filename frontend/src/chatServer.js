@@ -25,10 +25,7 @@ export const getChannels = (token) => {
         },
       }).then((response) => {
         return response.data;
-      })
-      .catch(function (err) {
-        console.log(err);
-       });
+      });
 }
 
 export const getMessages = (token) => {

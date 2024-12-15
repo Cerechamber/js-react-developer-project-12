@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { Formik } from "formik";
-import { actions } from "../reducers/chatReducer";
 import { useSelector } from 'react-redux';
-import { getChannels, getMessages } from "../chatServer";
+import { setChannels, setMessages, setActiveChannel } from "../reducers/chatReducer";
 import { numWord } from "../helpers";
 import {
   Button,
@@ -18,11 +17,14 @@ import plus from "../assets/plus.svg"
 import arrow from "../assets/arrow.svg"
 
 const Slack = ({dispatch, token}) => {
-  const { messages, activeChannel, channels  } = useSelector(state => state.chatReducer);
+  const { messages, activeChannel, channels } = useSelector(state => state.chatReducer);
 
   console.log(messages, activeChannel, channels);
 
   useEffect(() => {
+    dispatch(setChannels(token));
+    dispatch(setMessages(token));
+    /*
     const channelsData = async () => {
       const data = await getChannels(token);
       dispatch(actions.setChannels(data));
@@ -34,6 +36,7 @@ const Slack = ({dispatch, token}) => {
       dispatch(actions.setMessages(data));
     }
     messagesData();
+    */
   },[])
   return (
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
@@ -51,7 +54,7 @@ const Slack = ({dispatch, token}) => {
                 <li className="nav-item" key={channel.id} data-removable={channel.removable}>
                   <Button variant={channel.id === activeChannel ? 'info' : 'outline-info'}
                    className="rounded-0 w-100 text-start border-0"
-                   onClick={() => dispatch(actions.setActiveChannel(channel.id))}
+                   onClick={() => dispatch(setActiveChannel(channel.id))}
                    >
                     # {channel.name}
                   </Button>
