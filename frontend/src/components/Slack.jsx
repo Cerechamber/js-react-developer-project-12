@@ -13,8 +13,8 @@ import {
   Image
 } from "react-bootstrap";
 import pank from "../assets/pank.png";
-import plus from "../assets/plus.svg"
-import arrow from "../assets/arrow.svg"
+import plus from "../assets/plus.svg";
+import arrow from "../assets/arrow.svg";
 
 const Slack = ({dispatch, token}) => {
   const { messages, activeChannel, channels } = useSelector(state => state.chatReducer);
@@ -24,19 +24,6 @@ const Slack = ({dispatch, token}) => {
   useEffect(() => {
     dispatch(setChannels(token));
     dispatch(setMessages(token));
-    /*
-    const channelsData = async () => {
-      const data = await getChannels(token);
-      dispatch(actions.setChannels(data));
-    }
-    channelsData();
-
-    const messagesData = async () => {
-      const data = await getMessages(token);
-      dispatch(actions.setMessages(data));
-    }
-    messagesData();
-    */
   },[])
   return (
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">

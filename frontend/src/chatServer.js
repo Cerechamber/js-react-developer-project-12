@@ -74,8 +74,5 @@ export const getMessages = (token) => {
       }
     ]
     return mess;
-  })
-  .catch(function (err) {
-    console.log(err);
-   });
+  });
 }

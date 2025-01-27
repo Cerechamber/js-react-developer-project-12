@@ -36,8 +36,9 @@ const slice = createSlice({
     builder.addCase(setChannels.fulfilled, (state, { payload }) => {
       state.channels = payload;
     }).addCase(setChannels.rejected, (state, { payload }) => {
-      console.log(payload, 666);
+      console.log(payload, 'Возникла ошибка');
     }).addCase(setMessages.fulfilled, (state, { payload }) => {
+      state.messages = {};
       payload.forEach(item => {
         if (!state.messages[item.channelId]) {
             state.messages[item.channelId] = [];
@@ -45,7 +46,7 @@ const slice = createSlice({
         state.messages[item.channelId].push(item); 
     });
     }).addCase(setMessages.rejected, (state, { payload }) => {
-      console.log(payload, 666);
+      console.log(payload, 'Возникла ошибка');
     });
 
   }
