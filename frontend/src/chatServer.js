@@ -34,45 +34,16 @@ export const getMessages = (token) => {
       Authorization: `Bearer ${token}`,
     },
   }).then((response) => {
-    //return response.data;
-    const mess = [
-      {
-        id: '1',
-        body: 'text message',
-        channelId: '1',
-        username: 'admin',
-      },
-      {
-        id: '2',
-        body: 'text fucker',
-        channelId: '1',
-        username: 'saka',
-      },
-      {
-        id: '3',
-        body: 'text saka',
-        channelId: '2',
-        username: 'faka',
-      },
-      {
-        id: '4',
-        body: 'next',
-        channelId: '1',
-        username: 'faka',
-      },
-      {
-        id: '5',
-        body: 'next111',
-        channelId: '1',
-        username: 'faka',
-      },
-      {
-        id: '6',
-        body: 'next',
-        channelId: '1',
-        username: 'faka',
-      }
-    ]
-    return mess;
+    return response.data;
   });
-}
+};
+
+export const setMessage = (token, message) => {
+  return axios.post('/api/v1/messages', message, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => {
+    console.log(response.data);
+  });
+};

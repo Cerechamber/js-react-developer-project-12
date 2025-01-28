@@ -9,6 +9,12 @@ export default defineConfig({
       // Проксируем запросы к API
       "/api": {
         target: "http://localhost:5001",
+        changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            proxyReq.setHeader('Origin', 'http://localhost:5001');
+          });
+        },
       },
       // Проксируем WebSocket соединения
       "/socket.io": {
