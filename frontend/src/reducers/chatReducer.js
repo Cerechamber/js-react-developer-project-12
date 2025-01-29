@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getChannels, getMessages, setMessage } from "../chatServer";
+import { getChannels, getMessages } from "../chatServer";
 
 const initialState = {
   channels: [],
@@ -23,14 +23,6 @@ export const setMessages = createAsyncThunk(
   },
 );
 
-export const newMessage = createAsyncThunk(
-  'chat/newMessage',
-  async (token, message) => {
-    const response = await setMessage(token, message);
-    return response;
-  },
-);
-
 
 const slice = createSlice({
   name: "chat",
@@ -38,6 +30,12 @@ const slice = createSlice({
   reducers: {
     setActiveChannel(state, { payload }) {
       state.activeChannel = payload;
+  },
+    newMessage(state, { payload }) {
+      if (!state.messages[payload.channelId]) {
+        state.messages[payload.channelId] = [];
+    }
+      state.messages[payload.channelId].push(payload); 
   },
   },
   extraReducers: (builder) => {
@@ -47,23 +45,18 @@ const slice = createSlice({
       console.log(payload, 'Возникла ошибка');
     }).addCase(setMessages.fulfilled, (state, { payload }) => {
       state.messages = {};
-
       payload.forEach(item => {
         if (!state.messages[item.channelId]) {
             state.messages[item.channelId] = [];
         }
-        state.messages[item.channelId].push(item); 
+        state.messages[item.channelId].push(item);
     });
     }).addCase(setMessages.rejected, (state, { payload }) => {
-      console.log(payload, 'Возникла ошибка');
-    }).addCase(newMessage.fulfilled, (state, { payload }) => {
-      console.log(payload);
-    }).addCase(newMessage.rejected, (state, { payload }) => {
       console.log(payload, 'Возникла ошибка');
     });
 
   }
 });
 
-export const { setActiveChannel } = slice.actions;
+export const { setActiveChannel, newMessage } = slice.actions;
 export default slice.reducer;

@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { Formik } from "formik";
 import { useSelector } from 'react-redux';
 import { setChannels, setMessages, newMessage, setActiveChannel } from "../reducers/chatReducer";
-import { io } from "socket.io-client";
+import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
+import { io } from "socket.io-client";
 import {
   Button,
   Row,
@@ -17,16 +18,15 @@ import pank from "../assets/pank.png";
 import plus from "../assets/plus.svg";
 import arrow from "../assets/arrow.svg";
 
-const socket = io("ws://localhost:5001");
-console.log(socket);
-
 const Slack = ({dispatch, token}) => {
   const { messages, activeChannel, channels } = useSelector(state => state.chatReducer);
   const { name } = useSelector(state => state.authReducer);
 
-  console.log(messages);
-
   useEffect(() => {
+    const socket = io("ws://localhost:5001");
+    socket.on('newMessage', (response) => { 
+      dispatch(newMessage(response));
+    });
     dispatch(setChannels(token));
     dispatch(setMessages(token));
   },[])
@@ -89,7 +89,8 @@ const Slack = ({dispatch, token}) => {
               channelId: activeChannel,
               username: name
              };
-             dispatch(newMessage(token, nxtMessage));
+             setMessage(token, nxtMessage);
+             values.message = '';
           }}
           >
             {({values, handleChange, handleSubmit}) =>  (

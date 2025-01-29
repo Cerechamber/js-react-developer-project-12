@@ -43,7 +43,7 @@ export const setMessage = (token, message) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }).then((response) => {
-    console.log(response.data);
-  });
+  }).catch(function (err) {
+    console.log(err);
+   });
 };
