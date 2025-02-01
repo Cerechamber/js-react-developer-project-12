@@ -2,7 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Container, Navbar, Button } from "react-bootstrap";
 const Layout = ({ dispatch, setUser, navigate }) => {
-  const { token } = useSelector((state) => state.authReducer);
+  const { token } = useSelector((state) => state.usersReducer);
   const getOut = () => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("userName");

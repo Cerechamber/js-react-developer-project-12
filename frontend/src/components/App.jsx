@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { actions } from "../reducers/authReducer";
+import { actions } from "../reducers/usersReducer";
 import Layout from "./Layout";
 import Slack from "./Slack";
 import Login from "./Login";
@@ -19,7 +19,7 @@ function App() {
       navigate("/login", { replace: true });
     } else {
       const userName = localStorage.getItem("userName");
-      dispatch(actions.setUser({ name: userName, token: userToken }));
+      dispatch(actions.setUser({ currentUser: userName, token: userToken }));
     }
   });
 

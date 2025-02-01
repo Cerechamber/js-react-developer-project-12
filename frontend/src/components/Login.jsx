@@ -54,6 +54,8 @@ const Login = ({ dispatch, setUser, navigate }) => {
                             dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
                             localStorage.setItem("userName", data.username);
+                            values.nick = '';
+                            values.password = '';
                             navigate("/", { replace: false });
                           } else {
                             setError(true);

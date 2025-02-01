@@ -66,6 +66,9 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                               dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
                             localStorage.setItem("userName", data.username);
+                            values.nick = '';
+                            values.password = '';
+                            values.passwordConfirm = '';
                             navigate("/", { replace: false });
                             } else {
                               console.log('Запустите сервер');

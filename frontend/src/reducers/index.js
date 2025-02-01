@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./authReducer";
-import chatReducer from "./chatReducer";
+import usersReducer from "./usersReducer";
+import channelsReducer from "./channelsReducer";
+import messagesReducer from "./messagesReducer";
 import logger from "../middlewares";
 
 export default configureStore({
   reducer: {
-    authReducer,
-    chatReducer,
+    usersReducer,
+    channelsReducer,
+    messagesReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

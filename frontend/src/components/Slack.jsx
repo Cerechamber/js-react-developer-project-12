@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { useSelector } from 'react-redux';
-import { setChannels, setMessages, newMessage, setActiveChannel } from "../reducers/chatReducer";
+import { setChannels, setActiveChannel } from "../reducers/channelsReducer";
+import { setMessages, newMessage } from "../reducers/messagesReducer";
 import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
 import { io } from "socket.io-client";
+import SummonModal from "./Modal";
 import {
   Button,
   Row,
@@ -19,24 +21,30 @@ import plus from "../assets/plus.svg";
 import arrow from "../assets/arrow.svg";
 
 const Slack = ({dispatch, token}) => {
-  const { messages, activeChannel, channels } = useSelector(state => state.chatReducer);
-  const { name } = useSelector(state => state.authReducer);
+  const { activeChannel, channels } = useSelector(state => state.channelsReducer);
+  const { messages } = useSelector(state => state.messagesReducer);
+  const { currentUser } = useSelector(state => state.usersReducer);
+
+  const [sendField, setSendField] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
     const socket = io("ws://localhost:5001");
     socket.on('newMessage', (response) => { 
       dispatch(newMessage(response));
+      setSendField(true);
     });
     dispatch(setChannels(token));
     dispatch(setMessages(token));
   },[])
   return (
+    <>
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
       <Row className="justify-content-center shadow-lg h-100 mx-0 mx-sm-4 rounded-3 py-4">
           <Col lg={2} md={3} xs={4} className="h-100 d-flex flex-column">
           <div className="d-flex justify-content-between align-items-center px-0 px-sm-2">
             <div className="text-white fs-5 fw-bold channels-title">Каналы</div>
-            <Button variant="info" className="btn-group-vertical p-0 p-sm-2">
+            <Button variant="info" className="btn-group-vertical p-0 p-sm-2 summonModal" onClick={() => setModalShow(true)}>
               <Image src={plus} alt=" " />
             </Button>
           </div>
@@ -71,7 +79,7 @@ const Slack = ({dispatch, token}) => {
               messages[activeChannel].map(message => {
                 return (
                   <div className="text-break mb-3" key={message.id}>
-                    <span className="fw-bold">{message.username}</span>:
+                    <span className={message.username === currentUser ? 'fw-bold text-info-emphasis' : 'fw-bold' }>{message.username}</span>:
                     <span className="ms-2">{message.body}</span>
                   </div>
                 )
@@ -87,10 +95,11 @@ const Slack = ({dispatch, token}) => {
             const nxtMessage = {
               body: values.message,
               channelId: activeChannel,
-              username: name
+              username: currentUser,
              };
              setMessage(token, nxtMessage);
              values.message = '';
+             setSendField(false);
           }}
           >
             {({values, handleChange, handleSubmit}) =>  (
@@ -107,7 +116,7 @@ const Slack = ({dispatch, token}) => {
                     />
                     <Button variant="info" type="submit"
                      className="btn-group-vertical"
-                     disabled={values.message ? false : true}
+                     disabled={values.message && sendField ? false : true}
                      >
                       <Image src={arrow} />
                     </Button>
@@ -121,6 +130,8 @@ const Slack = ({dispatch, token}) => {
         </Col>
       </Row>
     </Container>
+    <SummonModal show={modalShow} setShow={setModalShow} />
+    </>
   );
 };
 
