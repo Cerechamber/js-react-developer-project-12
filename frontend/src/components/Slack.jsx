@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { useSelector } from 'react-redux';
-import { setChannels, setActiveChannel } from "../reducers/channelsReducer";
+import { setChannels, setActiveChannel, newChannel } from "../reducers/channelsReducer";
 import { setMessages, newMessage } from "../reducers/messagesReducer";
 import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
@@ -30,10 +30,17 @@ const Slack = ({dispatch, token}) => {
 
   useEffect(() => {
     const socket = io("ws://localhost:5001");
-    socket.on('newMessage', (response) => { 
-      dispatch(newMessage(response));
+
+    socket.on('newMessage', (payload) => { 
+      dispatch(newMessage(payload));
       setSendField(true);
     });
+
+    socket.on('newChannel', (payload) => {
+      dispatch(newChannel(payload));
+    });
+
+
     dispatch(setChannels(token));
     dispatch(setMessages(token));
   },[])
@@ -49,12 +56,12 @@ const Slack = ({dispatch, token}) => {
             </Button>
           </div>
           <ul id="channel-box" className="nav overflow-auto mt-4 d-block">
-            {channels.map(channel => {
+            {channels.map((channel, index) => {
               return (
                 <li className="nav-item" key={channel.id} data-removable={channel.removable}>
-                  <Button variant={channel.id === activeChannel ? 'info' : 'outline-info'}
+                  <Button variant={index === activeChannel ? 'info' : 'outline-info'}
                    className="rounded-0 w-100 text-start border-0"
-                   onClick={() => dispatch(setActiveChannel(channel.id))}
+                   onClick={() => dispatch(setActiveChannel(index))}
                    >
                     # {channel.name}
                   </Button>
@@ -65,7 +72,7 @@ const Slack = ({dispatch, token}) => {
         </Col>
         <Col lg={7} md={9} xs={8} className="d-flex flex-column h-100">
           <div className="bg-info p-2 p-sm-3">
-            <div className="fw-bold"># {channels.length ? channels[activeChannel - 1].name : ''}</div>
+            <div className="fw-bold"># {channels.length ? channels[activeChannel].name : ''}</div>
             <div>{messages[activeChannel] ?
              messages[activeChannel].length : ''}
              {messages[activeChannel] ?
@@ -130,7 +137,7 @@ const Slack = ({dispatch, token}) => {
         </Col>
       </Row>
     </Container>
-    <SummonModal show={modalShow} setShow={setModalShow} />
+    <SummonModal show={modalShow} setShow={setModalShow} channels={channels} token={token} />
     </>
   );
 };

@@ -47,3 +47,13 @@ export const setMessage = (token, message) => {
     console.log(err);
    });
 };
+
+export const setChannel = (token, newChannel) => {
+  return axios.post('/api/v1/channels', newChannel, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).catch(function (err) {
+    console.log(err);
+   });
+}

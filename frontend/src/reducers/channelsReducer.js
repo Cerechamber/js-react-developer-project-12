@@ -4,7 +4,7 @@ import { getChannels } from "../chatServer";
 
 const initialState = {
     channels: [],
-    activeChannel: '1',
+    activeChannel: 0,
   };
 
   export const setChannels = createAsyncThunk(
@@ -22,6 +22,10 @@ const initialState = {
       setActiveChannel(state, { payload }) {
         state.activeChannel = payload;
     },
+      newChannel(state, { payload }) {
+        state.channels.push(payload);
+        state.activeChannel = state.channels.length - 1;
+      },
     },
     extraReducers: (builder) => {
       builder.addCase(setChannels.fulfilled, (state, { payload }) => {
@@ -32,5 +36,5 @@ const initialState = {
     }
   });
   
-  export const { setActiveChannel } = slice.actions;
+  export const { setActiveChannel, newChannel } = slice.actions;
   export default slice.reducer;

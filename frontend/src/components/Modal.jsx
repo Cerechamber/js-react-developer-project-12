@@ -1,44 +1,70 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { setChannel } from "../chatServer";
 
- const SummonModal = ({ show, setShow }) => {
+
+ const SummonModal = ({ show, setShow, channels, token }) => {
+
+  const validSchema = Yup.object().shape({
+    title: Yup.string()
+      .required("Обязательное поле")
+      .min(3, "Минимум 3 символа")
+      .max(20, "Максимум 20 символов")
+      .test({
+        test(value, ctx) {
+          if (channels.find(c => c.name === value)) {
+            return ctx.createError({ message: 'Наименование канала должно быть уникальным' });
+          }
+          return true
+        }
+      })
+  });
+
     return (
       <Modal
+        data-bs-theme="dark"
         backdrop='static'
         show={ show }
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
         <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title id="contained-modal-title-vcenter" className='text-white'>
             Добавить канал
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Formik
             initialValues={{
-              name: '',
+              title: '',
             }}
+            validationSchema={validSchema}
             onSubmit={(values) => {
-
+              setChannel(token, {name: values.title});
+              setShow(false);
             }}
             >
-              {({values, handleChange, handleSubmit}) => (
+              {({values, errors, touched, handleChange, handleSubmit}) => (
                 <Form onSubmit={handleSubmit}>
                     <Form.Control
-                      name="message"
+                      name="title"
                       type="text"
-                      value={values.name}
+                      value={values.title}
                       onChange={handleChange}
+                      isInvalid={errors.title && touched.title}
+                      isValid={!errors.title && touched.title}
+                      autoFocus
                     />
-                <Button onClick={() => setShow(false)}>Отменить</Button>
-                <Button type="submit">Отправить</Button>
-
+                    <Form.Control.Feedback type="invalid">
+                       {errors.title}
+                    </Form.Control.Feedback>
+                <div className='d-flex justify-content-end mt-3'>
+                <Button onClick={() => setShow(false)} className='btn-dark me-2'>Отменить</Button>
+                <Button type="submit" className='btn-info'>Отправить</Button>
+                </div>
                 </Form>
               )}
-
             </Formik>
         </Modal.Body>
       </Modal>
