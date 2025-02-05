@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { actions } from "../reducers/usersReducer";
+import { io } from "socket.io-client";
 import Layout from "./Layout";
 import Slack from "./Slack";
 import Login from "./Login";
@@ -9,20 +9,36 @@ import Reg from "./Reg";
 import NotFound from "./NotFound";
 import "../App.css";
 
+import { actions } from "../reducers/usersReducer";
+import { newMessage } from "../reducers/messagesReducer";
+import { newChannel } from "../reducers/channelsReducer";
+
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const userToken = localStorage.getItem("userToken");
+  const userName = localStorage.getItem("userName");
   useEffect(() => {
-    if (!userToken && location.pathname === "/") {
+
+    if ((!userToken || !userName) && location.pathname === "/") {
       navigate("/login", { replace: true });
     } else {
-      const userName = localStorage.getItem("userName");
-      dispatch(actions.setUser({ currentUser: userName, token: userToken }));
+      dispatch(actions.setUser({ username: userName, token: userToken }));
     }
-  });
 
+    const socket = io("ws://localhost:5001");
+    
+    socket.on('newMessage', (payload) => { 
+      dispatch(newMessage(payload));
+    });
+   
+    socket.on('newChannel', (payload) => {
+      dispatch(newChannel(payload));
+    });
+    
+
+  },[]);
   return (
     <Routes>
       <Route
@@ -37,7 +53,6 @@ function App() {
       >
         <Route index element={
           <Slack
-          token={userToken}
           dispatch={dispatch}
           />
         }
@@ -69,3 +84,18 @@ function App() {
 }
 
 export default App;
+
+
+/*
+ socket.on('newChannel', (channel, acknowledge = _.noop) => {
+      const channelWithId = {
+        ...channel,
+        removable: true,
+        id: getNextId(),
+      };
+
+      state.channels.push(channelWithId);
+      acknowledge({ status: 'ok', data: channelWithId });
+      app.io.emit('newChannel', channelWithId);
+    });
+    */

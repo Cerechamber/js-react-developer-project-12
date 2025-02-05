@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { useSelector } from 'react-redux';
-import { setChannels, setActiveChannel, newChannel } from "../reducers/channelsReducer";
-import { setMessages, newMessage } from "../reducers/messagesReducer";
+import { setChannels, setActiveChannel } from "../reducers/channelsReducer";
+import { setMessages } from "../reducers/messagesReducer";
 import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
-import { io } from "socket.io-client";
 import SummonModal from "./Modal";
 import {
   Button,
@@ -20,30 +19,19 @@ import pank from "../assets/pank.png";
 import plus from "../assets/plus.svg";
 import arrow from "../assets/arrow.svg";
 
-const Slack = ({dispatch, token}) => {
+const Slack = ({dispatch}) => {
   const { activeChannel, channels } = useSelector(state => state.channelsReducer);
   const { messages } = useSelector(state => state.messagesReducer);
-  const { currentUser } = useSelector(state => state.usersReducer);
+  const { username, token } = useSelector(state => state.usersReducer);
 
-  const [sendField, setSendField] = useState(true);
   const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
-    const socket = io("ws://localhost:5001");
-
-    socket.on('newMessage', (payload) => { 
-      dispatch(newMessage(payload));
-      setSendField(true);
-    });
-
-    socket.on('newChannel', (payload) => {
-      dispatch(newChannel(payload));
-    });
-
-
-    dispatch(setChannels(token));
-    dispatch(setMessages(token));
-  },[])
+    if (token) {
+      dispatch(setChannels(token));
+      dispatch(setMessages(token));
+    }
+  },[token])
   return (
     <>
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
@@ -86,7 +74,7 @@ const Slack = ({dispatch, token}) => {
               messages[activeChannel].map(message => {
                 return (
                   <div className="text-break mb-3" key={message.id}>
-                    <span className={message.username === currentUser ? 'fw-bold text-info-emphasis' : 'fw-bold' }>{message.username}</span>:
+                    <span className={message.username === username ? 'fw-bold text-info-emphasis' : 'fw-bold' }>{message.username}</span>:
                     <span className="ms-2">{message.body}</span>
                   </div>
                 )
@@ -101,12 +89,11 @@ const Slack = ({dispatch, token}) => {
           onSubmit={(values) => {
             const nxtMessage = {
               body: values.message,
-              channelId: activeChannel,
-              username: currentUser,
+              channelId: String(activeChannel),
+              username: username,
              };
              setMessage(token, nxtMessage);
              values.message = '';
-             setSendField(false);
           }}
           >
             {({values, handleChange, handleSubmit}) =>  (
@@ -123,7 +110,7 @@ const Slack = ({dispatch, token}) => {
                     />
                     <Button variant="info" type="submit"
                      className="btn-group-vertical"
-                     disabled={values.message && sendField ? false : true}
+                     disabled={values.message ? false : true}
                      >
                       <Image src={arrow} />
                     </Button>

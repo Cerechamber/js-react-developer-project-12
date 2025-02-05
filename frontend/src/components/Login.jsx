@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
@@ -16,6 +17,16 @@ import {
 } from "react-bootstrap";
 
 const Login = ({ dispatch, setUser, navigate }) => {
+
+const { username, token } = useSelector(state => state.usersReducer);
+  
+  useEffect(() => {
+    if (username || token) {
+      navigate("/", { replace: true });
+    }
+  },[token, username]);
+
+
   const [error, setError] = useState(false);
   const AuthSchema = Yup.object().shape({
     nick: Yup.string().required("Обязательное поле"),
@@ -49,7 +60,7 @@ const Login = ({ dispatch, setUser, navigate }) => {
                       onSubmit={(values)=>{
                         const userData = async () => {
                           const data = await authUser(values.nick, values.password);
-                          if (data) {
+                          if (data.token) {
                             setError(false);
                             dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);

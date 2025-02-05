@@ -24,7 +24,7 @@ const initialState = {
     },
       newChannel(state, { payload }) {
         state.channels.push(payload);
-        state.activeChannel = state.channels.length - 1;
+        //state.activeChannel = state.channels.length - 1;
       },
     },
     extraReducers: (builder) => {

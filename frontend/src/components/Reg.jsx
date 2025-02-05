@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Formik } from "formik";
 import { Link } from "react-router-dom"; 
+import { useSelector } from 'react-redux';
 import * as Yup from "yup";
 import { regUser } from "../chatServer";
 import tunnel from "../assets/tunnel2.png";
@@ -33,6 +35,14 @@ const SignupSchema = Yup.object().shape({
 });
 
 const Reg = ({ dispatch, setUser, navigate }) => {
+  const { username, token } = useSelector(state => state.usersReducer);
+  
+  useEffect(() => {
+    if (username || token) {
+      navigate("/", { replace: true });
+    }
+  },[token, username]);
+
   return (
     <Container fluid={true} className="auth bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
       <Row className="justify-content-center align-items-center h-100 mx-1 mx-sm-4">
@@ -62,7 +72,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                         onSubmit={(values) => {
                           const userData = async () => {
                             const data = await regUser(values.nick, values.password);
-                            if (data) {
+                            if (data.token) {
                               dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
                             localStorage.setItem("userName", data.username);
