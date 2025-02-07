@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run build --prefix frontend",
     "start": "start-server -s ./frontend/dist",
-    "postinstall": "cd frontend && npm ci"
+    "postinstall": "cd frontend && npm ci --legacy-peer-deps"
   },
   "repository": {
     "type": "git",
