@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { useSelector } from 'react-redux';
-import { setChannels, setActiveChannel } from "../reducers/channelsReducer";
+import { setChannels, switchChannel } from "../reducers/channelsReducer";
 import { setMessages } from "../reducers/messagesReducer";
 import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
@@ -49,7 +49,7 @@ const Slack = ({dispatch}) => {
                 <li className="nav-item" key={channel.id} data-removable={channel.removable}>
                   <Button variant={index === activeChannel ? 'info' : 'outline-info'}
                    className="rounded-0 w-100 text-start border-0"
-                   onClick={() => dispatch(setActiveChannel(index))}
+                   onClick={() => dispatch(switchChannel(index))}
                    >
                     # {channel.name}
                   </Button>
@@ -124,7 +124,7 @@ const Slack = ({dispatch}) => {
         </Col>
       </Row>
     </Container>
-    <SummonModal show={modalShow} setShow={setModalShow} channels={channels} token={token} />
+    <SummonModal show={modalShow} setShow={setModalShow} username={username} channels={channels} token={token} dispatch={dispatch} />
     </>
   );
 };

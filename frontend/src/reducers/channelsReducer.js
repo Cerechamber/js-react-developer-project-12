@@ -5,6 +5,7 @@ import { getChannels } from "../chatServer";
 const initialState = {
     channels: [],
     activeChannel: 0,
+    initiator: '',
   };
 
   export const setChannels = createAsyncThunk(
@@ -19,12 +20,19 @@ const initialState = {
     name: "channels",
     initialState,
     reducers: {
-      setActiveChannel(state, { payload }) {
-        state.activeChannel = payload;
-    },
-      newChannel(state, { payload }) {
-        state.channels.push(payload);
-        //state.activeChannel = state.channels.length - 1;
+      setInitiator(state, { payload }) {
+        state.initiator = payload;
+      },
+      switchChannel(state, { payload }) {
+        if (payload.name) {
+          state.channels.push(payload);
+        if (state.initiator) {
+          state.activeChannel = state.channels.length - 1;
+        }
+        state.initiator = '';
+        } else {
+          state.activeChannel = payload;
+        }
       },
     },
     extraReducers: (builder) => {
@@ -36,5 +44,5 @@ const initialState = {
     }
   });
   
-  export const { setActiveChannel, newChannel } = slice.actions;
+  export const { switchChannel, setInitiator } = slice.actions;
   export default slice.reducer;

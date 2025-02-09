@@ -11,7 +11,7 @@ import "../App.css";
 
 import { actions } from "../reducers/usersReducer";
 import { newMessage } from "../reducers/messagesReducer";
-import { newChannel } from "../reducers/channelsReducer";
+import { switchChannel } from "../reducers/channelsReducer";
 
 function App() {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ function App() {
     });
    
     socket.on('newChannel', (payload) => {
-      dispatch(newChannel(payload));
+      dispatch(switchChannel(payload));
     });
     
 
@@ -84,18 +84,3 @@ function App() {
 }
 
 export default App;
-
-
-/*
- socket.on('newChannel', (channel, acknowledge = _.noop) => {
-      const channelWithId = {
-        ...channel,
-        removable: true,
-        id: getNextId(),
-      };
-
-      state.channels.push(channelWithId);
-      acknowledge({ status: 'ok', data: channelWithId });
-      app.io.emit('newChannel', channelWithId);
-    });
-    */

@@ -2,9 +2,10 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { setChannel } from "../chatServer";
+import { setInitiator } from '../reducers/channelsReducer';
 
 
- const SummonModal = ({ show, setShow, channels, token }) => {
+ const SummonModal = ({ show, setShow, username, channels, token, dispatch }) => {
 
   const validSchema = Yup.object().shape({
     title: Yup.string()
@@ -41,6 +42,7 @@ import { setChannel } from "../chatServer";
             }}
             validationSchema={validSchema}
             onSubmit={(values) => {
+              dispatch(setInitiator(username));
               setChannel(token, {name: values.title});
               setShow(false);
             }}

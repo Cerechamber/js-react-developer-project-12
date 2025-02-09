@@ -1,9 +1,12 @@
 const logger = (store) => (next) => (action) => {
-    console.group(action.type);
-    console.info('dispatching', action);
+  console.log(action);
+  /*
+    const state = store.getState();
+    if (action.type === 'channels/newChannel') {
+    }
+    */
     const result = next(action);
     console.log('next state', store.getState());
-    console.groupEnd();
     return result;
   };
 
