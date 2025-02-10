@@ -34,6 +34,10 @@ const initialState = {
           state.activeChannel = payload;
         }
       },
+      renameChannel(state, { payload }) {
+        const editedChannel = state.channels.find(c => c.id === payload.id);
+        editedChannel.name = payload.name;
+      },
     },
     extraReducers: (builder) => {
       builder.addCase(setChannels.fulfilled, (state, { payload }) => {
@@ -44,5 +48,5 @@ const initialState = {
     }
   });
   
-  export const { switchChannel, setInitiator } = slice.actions;
+  export const { switchChannel, setInitiator, renameChannel } = slice.actions;
   export default slice.reducer;

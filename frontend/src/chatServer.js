@@ -57,3 +57,14 @@ export const setChannel = (token, newChannel) => {
     console.log(err);
    });
 }
+
+export const editChannel = (token, editedChannel, id) => {
+axios.patch(`/api/v1/channels/${id}`, editedChannel, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+}).catch(function (err) {
+  console.log(err);
+ });
+}
+

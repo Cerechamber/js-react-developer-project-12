@@ -7,6 +7,10 @@
   transition: .2s;
 }
 
+#channel-box {
+  min-height: 100%;
+}
+
 @media (max-width: 565px) {
   .auth__img {
     max-height: 18vh;
@@ -23,6 +27,9 @@
   .form-chat {
     width: 95vw;
     transform: translateX(-36%);
+  }
+  .dropdown-item {
+    font-size: x-small;
   }
 }
 

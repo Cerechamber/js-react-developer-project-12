@@ -5,9 +5,12 @@ import { setChannels, switchChannel } from "../reducers/channelsReducer";
 import { setMessages } from "../reducers/messagesReducer";
 import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
-import SummonModal from "./Modal";
+import NewChannel from "./Modals/NewChannel";
+import EditChannel from "./Modals/EditChannel";
 import {
   Button,
+  ButtonGroup,
+  Dropdown,
   Row,
   Col,
   Container,
@@ -24,7 +27,9 @@ const Slack = ({dispatch}) => {
   const { messages } = useSelector(state => state.messagesReducer);
   const { username, token } = useSelector(state => state.usersReducer);
 
-  const [modalShow, setModalShow] = useState(false);
+  const [newModal, newModalSet] = useState(false);
+  const [editModal, editModalSet] = useState(false);
+  const [toEditChannel, toEditChannelSet] = useState({title: '', id: ''});
 
   useEffect(() => {
     if (token) {
@@ -39,22 +44,56 @@ const Slack = ({dispatch}) => {
           <Col lg={2} md={3} xs={4} className="h-100 d-flex flex-column">
           <div className="d-flex justify-content-between align-items-center px-0 px-sm-2">
             <div className="text-white fs-5 fw-bold channels-title">Каналы</div>
-            <Button variant="info" className="btn-group-vertical p-0 p-sm-2 summonModal" onClick={() => setModalShow(true)}>
+            <Button variant="info" className="btn-group-vertical p-0 p-sm-2 summonModal" onClick={() => newModalSet(true)}>
               <Image src={plus} alt=" " />
             </Button>
           </div>
           <ul id="channel-box" className="nav overflow-auto mt-4 d-block">
             {channels.map((channel, index) => {
-              return (
-                <li className="nav-item" key={channel.id} data-removable={channel.removable}>
+                return (
+                  <li className="nav-item" key={channel.id}>
+                 { channel.removable ?
+                  <Dropdown 
+                    as={ButtonGroup}
+                    className="w-100">
+                  <Button
+                   variant={index === activeChannel ? 'info' : 'outline-info'}
+                   className="rounded-0 w-75 text-start border-0"
+                   onClick={() => dispatch(switchChannel(index))}
+                   >
+                    # {channel.name}
+                  </Button>
+                  <Dropdown.Toggle
+                   split variant={index === activeChannel ? 'info' : 'outline-info'} id={`drop${index}`}
+                   className="rounded-0 text-center border-0 opacity-50"
+                    />
+                  <Dropdown.Menu>
+                    <Dropdown.Item 
+                    eventKey="1"
+                    >
+                      Удалить
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                     eventKey="2"
+                     onClick={() => {
+                      toEditChannelSet({title: channel.name, id: channel.id});
+                      editModalSet(true);
+                     }}
+                     >
+                      Переименовать
+                     </Dropdown.Item>
+                  </Dropdown.Menu>
+                  </Dropdown>
+                :
                   <Button variant={index === activeChannel ? 'info' : 'outline-info'}
                    className="rounded-0 w-100 text-start border-0"
                    onClick={() => dispatch(switchChannel(index))}
                    >
                     # {channel.name}
                   </Button>
-                </li>
-              )
+                 }
+                 </li>
+                )
             })}
           </ul>
         </Col>
@@ -124,7 +163,24 @@ const Slack = ({dispatch}) => {
         </Col>
       </Row>
     </Container>
-    <SummonModal show={modalShow} setShow={setModalShow} username={username} channels={channels} token={token} dispatch={dispatch} />
+    
+    <NewChannel
+     show={newModal}
+     setShow={newModalSet}
+     username={username}
+     channels={channels}
+     token={token}
+     dispatch={dispatch}
+    />
+
+    <EditChannel
+     show={editModal}
+     setShow={editModalSet}
+     channels={channels}
+     token={token}
+     dispatch={dispatch}
+     toEditChannel={toEditChannel}
+    />
     </>
   );
 };

@@ -1,11 +1,11 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { setChannel } from "../chatServer";
-import { setInitiator } from '../reducers/channelsReducer';
+import { setChannel } from "../../chatServer";
+import { setInitiator } from '../../reducers/channelsReducer';
 
 
- const SummonModal = ({ show, setShow, username, channels, token, dispatch }) => {
+ const NewChannel = ({ show, setShow, username, channels, token, dispatch }) => {
 
   const validSchema = Yup.object().shape({
     title: Yup.string()
@@ -73,4 +73,4 @@ import { setInitiator } from '../reducers/channelsReducer';
     );
   }
 
-  export default SummonModal;
+  export default NewChannel;
