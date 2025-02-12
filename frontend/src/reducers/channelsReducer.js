@@ -5,7 +5,7 @@ import { getChannels } from "../chatServer";
 const initialState = {
     channels: [],
     activeChannel: 0,
-    initiator: '',
+    initiator: false,
   };
 
   export const setChannels = createAsyncThunk(
@@ -29,7 +29,7 @@ const initialState = {
         if (state.initiator) {
           state.activeChannel = state.channels.length - 1;
         }
-        state.initiator = '';
+        state.initiator = false;
         } else {
           state.activeChannel = payload;
         }
@@ -37,6 +37,9 @@ const initialState = {
       renameChannel(state, { payload }) {
         const editedChannel = state.channels.find(c => c.id === payload.id);
         editedChannel.name = payload.name;
+      },
+      removeChannel(state, { payload }) {
+        console.log('deleted',payload);
       },
     },
     extraReducers: (builder) => {
@@ -48,5 +51,5 @@ const initialState = {
     }
   });
   
-  export const { switchChannel, setInitiator, renameChannel } = slice.actions;
+  export const { switchChannel, setInitiator, renameChannel, removeChannel } = slice.actions;
   export default slice.reducer;

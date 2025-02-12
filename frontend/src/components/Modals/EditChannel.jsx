@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { editChannel } from "../../chatServer";
 
 
- const EditChannel = ({ show, setShow, channels, token, dispatch, toEditChannel }) => {
+ const EditChannel = ({ show, setShow, channels, token, toEditChannel }) => {
 
     const inputRef = useRef(null);
 

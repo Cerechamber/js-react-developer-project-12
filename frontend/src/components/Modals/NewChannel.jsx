@@ -5,7 +5,7 @@ import { setChannel } from "../../chatServer";
 import { setInitiator } from '../../reducers/channelsReducer';
 
 
- const NewChannel = ({ show, setShow, username, channels, token, dispatch }) => {
+ const NewChannel = ({ show, setShow, channels, token, dispatch }) => {
 
   const validSchema = Yup.object().shape({
     title: Yup.string()
@@ -42,7 +42,7 @@ import { setInitiator } from '../../reducers/channelsReducer';
             }}
             validationSchema={validSchema}
             onSubmit={(values) => {
-              dispatch(setInitiator(username));
+              dispatch(setInitiator(true));
               setChannel(token, {name: values.title});
               setShow(false);
             }}

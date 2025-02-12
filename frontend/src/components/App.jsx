@@ -11,7 +11,7 @@ import "../App.css";
 
 import { actions } from "../reducers/usersReducer";
 import { newMessage } from "../reducers/messagesReducer";
-import { switchChannel, renameChannel } from "../reducers/channelsReducer";
+import { switchChannel, renameChannel, removeChannel } from "../reducers/channelsReducer";
 
 function App() {
   const navigate = useNavigate();
@@ -39,6 +39,10 @@ function App() {
 
     socket.on('renameChannel', (payload) => {
       dispatch(renameChannel(payload));
+    });
+
+    socket.on('removeChannel', (payload) => {
+      dispatch(removeChannel(payload));
     });
     
 

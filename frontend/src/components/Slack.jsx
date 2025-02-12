@@ -7,6 +7,8 @@ import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
 import NewChannel from "./Modals/NewChannel";
 import EditChannel from "./Modals/EditChannel";
+import DeleteChannel from "./Modals/DeleteChannel";
+
 import {
   Button,
   ButtonGroup,
@@ -29,7 +31,9 @@ const Slack = ({dispatch}) => {
 
   const [newModal, newModalSet] = useState(false);
   const [editModal, editModalSet] = useState(false);
+  const [toDelModal, toDelModalSet] = useState(false);
   const [toEditChannel, toEditChannelSet] = useState({title: '', id: ''});
+  const [delId, delIdSet] = useState('');
 
   useEffect(() => {
     if (token) {
@@ -70,6 +74,10 @@ const Slack = ({dispatch}) => {
                   <Dropdown.Menu>
                     <Dropdown.Item 
                     eventKey="1"
+                    onClick={() => {
+                      delIdSet(channel.id);
+                      toDelModalSet(true);
+                     }}
                     >
                       Удалить
                     </Dropdown.Item>
@@ -178,9 +186,16 @@ const Slack = ({dispatch}) => {
      setShow={editModalSet}
      channels={channels}
      token={token}
-     dispatch={dispatch}
      toEditChannel={toEditChannel}
     />
+
+    <DeleteChannel
+     show={toDelModal}
+     setShow={toDelModalSet}
+     token={token}
+     delId={delId}
+    />
+
     </>
   );
 };

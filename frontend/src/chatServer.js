@@ -68,3 +68,15 @@ axios.patch(`/api/v1/channels/${id}`, editedChannel, {
  });
 }
 
+export const removeChannel = (token, id) => {
+  axios.delete(`/api/v1/channels/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).catch(function (err) {
+    console.log(err);
+   });
+  }
+
+
+
