@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getMessages } from "../chatServer";
+import { removeChannel } from "./channelsReducer";
 
 const initialState = {
   messages: {}
@@ -19,25 +20,18 @@ const slice = createSlice({
   initialState,
   reducers: {
     newMessage(state, { payload }) {
-      if (!state.messages[payload.channelId]) {
-        state.messages[payload.channelId] = [];
-    }
-      state.messages[payload.channelId].push(payload); 
+      state.messages.push(payload);
   },
   },
   extraReducers: (builder) => {
     builder.addCase(setMessages.fulfilled, (state, { payload }) => {
-      state.messages = {};
-      payload.forEach(item => {
-        if (!state.messages[item.channelId]) {
-            state.messages[item.channelId] = [];
-        }
-        state.messages[item.channelId].push(item);
-    });
+      state.messages = payload;
     }).addCase(setMessages.rejected, (state, { payload }) => {
       console.log(payload, 'Возникла ошибка');
+    }).addCase(removeChannel, (state, { payload }) => {
+      const newMessages = state.messages.filter(m => m.channelId !== payload.id);
+      state.messages = newMessages;
     });
-
   }
 });
 

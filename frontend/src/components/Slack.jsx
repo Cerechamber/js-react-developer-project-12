@@ -41,6 +41,15 @@ const Slack = ({dispatch}) => {
       dispatch(setMessages(token));
     }
   },[token])
+
+  let activeMessages = [];
+  
+  if (messages.length) {
+     activeMessages = messages.filter(m => m.channelId === activeChannel.id);
+  }
+  
+
+
   return (
     <>
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
@@ -61,14 +70,14 @@ const Slack = ({dispatch}) => {
                     as={ButtonGroup}
                     className="w-100">
                   <Button
-                   variant={index === activeChannel ? 'info' : 'outline-info'}
+                   variant={channel.id === activeChannel.id ? 'info' : 'outline-info'}
                    className="rounded-0 w-75 text-start border-0"
-                   onClick={() => dispatch(switchChannel(index))}
+                   onClick={() => dispatch(switchChannel(channel.id))}
                    >
                     # {channel.name}
                   </Button>
                   <Dropdown.Toggle
-                   split variant={index === activeChannel ? 'info' : 'outline-info'} id={`drop${index}`}
+                   split variant={channel.id === activeChannel.id ? 'info' : 'outline-info'} id={`drop${index}`}
                    className="rounded-0 text-center border-0 opacity-50"
                     />
                   <Dropdown.Menu>
@@ -93,9 +102,9 @@ const Slack = ({dispatch}) => {
                   </Dropdown.Menu>
                   </Dropdown>
                 :
-                  <Button variant={index === activeChannel ? 'info' : 'outline-info'}
+                  <Button variant={channel.id === activeChannel.id ? 'info' : 'outline-info'}
                    className="rounded-0 w-100 text-start border-0"
-                   onClick={() => dispatch(switchChannel(index))}
+                   onClick={() => dispatch(switchChannel(channel.id))}
                    >
                     # {channel.name}
                   </Button>
@@ -107,18 +116,18 @@ const Slack = ({dispatch}) => {
         </Col>
         <Col lg={7} md={9} xs={8} className="d-flex flex-column h-100">
           <div className="bg-info p-2 p-sm-3">
-            <div className="fw-bold"># {channels.length ? channels[activeChannel].name : ''}</div>
-            <div>{messages[activeChannel] ?
-             messages[activeChannel].length : ''}
-             {messages[activeChannel] ?
-             numWord(messages[activeChannel].length,
+            <div className="fw-bold"># {activeChannel.name ? activeChannel.name : ''}</div>
+            <div>{activeMessages.length ?
+             activeMessages.length : ''}
+             {activeMessages.length ?
+             numWord(activeMessages.length,
               [' сообщений', ' сообщение', ' сообщения']) : ''}
              </div>
           </div>
           <div id="messages-box" className="overflow-auto py-3 px-0 p-sm-4 text-white fs-5 fs-md-6">
             
-            {messages[activeChannel] ?
-              messages[activeChannel].map(message => {
+            {activeMessages.length ?
+              activeMessages.map(message => {
                 return (
                   <div className="text-break mb-3" key={message.id}>
                     <span className={message.username === username ? 'fw-bold text-info-emphasis' : 'fw-bold' }>{message.username}</span>:
@@ -136,7 +145,7 @@ const Slack = ({dispatch}) => {
           onSubmit={(values) => {
             const nxtMessage = {
               body: values.message,
-              channelId: String(activeChannel),
+              channelId: activeChannel.id,
               username: username,
              };
              setMessage(token, nxtMessage);

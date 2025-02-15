@@ -4,7 +4,7 @@ import { getChannels } from "../chatServer";
 
 const initialState = {
     channels: [],
-    activeChannel: 0,
+    activeChannel: {},
     initiator: false,
   };
 
@@ -24,14 +24,17 @@ const initialState = {
         state.initiator = payload;
       },
       switchChannel(state, { payload }) {
+        let newActiveChannel = [];
         if (payload.name) {
           state.channels.push(payload);
         if (state.initiator) {
-          state.activeChannel = state.channels.length - 1;
+          newActiveChannel = state.channels.find(c => c.id === payload.id);
+          state.activeChannel = newActiveChannel;
         }
         state.initiator = false;
         } else {
-          state.activeChannel = payload;
+          newActiveChannel = state.channels.find(c => c.id === payload);
+          state.activeChannel = newActiveChannel;
         }
       },
       renameChannel(state, { payload }) {
@@ -39,12 +42,17 @@ const initialState = {
         editedChannel.name = payload.name;
       },
       removeChannel(state, { payload }) {
-        console.log('deleted',payload);
+        if (state.activeChannel.id === payload.id) {
+          state.activeChannel = state.channels[0];
+        }
+        const newChannels = state.channels.filter(c => c.id !== payload.id);
+        state.channels = newChannels;
       },
     },
     extraReducers: (builder) => {
       builder.addCase(setChannels.fulfilled, (state, { payload }) => {
         state.channels = payload;
+        state.activeChannel = payload[0];
       }).addCase(setChannels.rejected, (state, { payload }) => {
         console.log(payload, 'Возникла ошибка');
       })
