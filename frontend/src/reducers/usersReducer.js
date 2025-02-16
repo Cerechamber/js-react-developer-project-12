@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   username: "",
   token: "",
+  blockSending: false,
 };
 
 const slice = createSlice({
@@ -13,8 +14,11 @@ const slice = createSlice({
       state.username = payload.username;
       state.token = payload.token;
     },
+    changeBlockSending(state, { payload }) {
+      state.blockSending = payload;
+    }
   },
 });
 
-export const { actions } = slice;
+export const { setUser, changeBlockSending } = slice.actions;
 export default slice.reducer;

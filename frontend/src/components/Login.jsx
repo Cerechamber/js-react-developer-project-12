@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { authUser } from "../chatServer";
 import tunnel from "../assets/tunnel.png";
+import { changeBlockSending } from "../reducers/usersReducer";
 import {
   Button,
   Row,
@@ -19,6 +20,7 @@ import {
 const Login = ({ dispatch, setUser, navigate }) => {
 
 const { username, token } = useSelector(state => state.usersReducer);
+const { blockSending } = useSelector(state => state.usersReducer);
   
   useEffect(() => {
     if (username || token) {
@@ -58,9 +60,10 @@ const { username, token } = useSelector(state => state.usersReducer);
                       }}
                       validationSchema={AuthSchema}
                       onSubmit={(values)=>{
+                        dispatch(changeBlockSending(true));
                         const userData = async () => {
                           const data = await authUser(values.nick, values.password);
-                          if (data.token) {
+                          if (data && data.token) {
                             setError(false);
                             dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
@@ -70,6 +73,7 @@ const { username, token } = useSelector(state => state.usersReducer);
                             navigate("/", { replace: false });
                           } else {
                             setError(true);
+                            dispatch(changeBlockSending(false));
                           }
                         }
                         userData();
@@ -130,6 +134,7 @@ const { username, token } = useSelector(state => state.usersReducer);
                             variant="info"
                             className="w-100 mt-3"
                             type="submit"
+                            disabled={!blockSending ? false : true}
                           >
                             Войти
                           </Button>

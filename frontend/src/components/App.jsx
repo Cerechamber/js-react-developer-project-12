@@ -9,7 +9,7 @@ import Reg from "./Reg";
 import NotFound from "./NotFound";
 import "../App.css";
 
-import { actions } from "../reducers/usersReducer";
+import { setUser, changeBlockSending } from "../reducers/usersReducer";
 import { newMessage } from "../reducers/messagesReducer";
 import { switchChannel, renameChannel, removeChannel } from "../reducers/channelsReducer";
 
@@ -24,25 +24,29 @@ function App() {
     if ((!userToken || !userName) && location.pathname === "/") {
       navigate("/login", { replace: true });
     } else {
-      dispatch(actions.setUser({ username: userName, token: userToken }));
+      dispatch(setUser({ username: userName, token: userToken }));
     }
 
     const socket = io("ws://localhost:5001");
     
     socket.on('newMessage', (payload) => { 
       dispatch(newMessage(payload));
+      dispatch(changeBlockSending(false));
     });
    
     socket.on('newChannel', (payload) => {
       dispatch(switchChannel(payload));
+      dispatch(changeBlockSending(false));
     });
 
     socket.on('renameChannel', (payload) => {
       dispatch(renameChannel(payload));
+      dispatch(changeBlockSending(false));
     });
 
     socket.on('removeChannel', (payload) => {
       dispatch(removeChannel(payload));
+      dispatch(changeBlockSending(false));
     });
     
 
@@ -54,7 +58,7 @@ function App() {
         element={
           <Layout
             dispatch={dispatch}
-            setUser={actions.setUser}
+            setUser={setUser}
             navigate={navigate}
           />
         }
@@ -70,7 +74,7 @@ function App() {
           element={
             <Login
               dispatch={dispatch}
-              setUser={actions.setUser}
+              setUser={setUser}
               navigate={navigate}
             />
           }
@@ -80,7 +84,7 @@ function App() {
           element={
             <Reg
               dispatch={dispatch}
-              setUser={actions.setUser}
+              setUser={setUser}
               navigate={navigate}
             />
           }

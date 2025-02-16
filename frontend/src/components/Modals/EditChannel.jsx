@@ -3,9 +3,10 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { editChannel } from "../../chatServer";
+import { changeBlockSending } from '../../reducers/usersReducer';
 
 
- const EditChannel = ({ show, setShow, channels, token, toEditChannel }) => {
+ const EditChannel = ({ show, setShow, channels, token, dispatch, toEditChannel, blockSending }) => {
 
     const inputRef = useRef(null);
 
@@ -51,6 +52,7 @@ import { editChannel } from "../../chatServer";
             }}
             validationSchema={validSchema}
             onSubmit={(values) => {
+              dispatch(changeBlockSending(true));
               editChannel(token, {name: values.title}, toEditChannel.id);
               setShow(false);
             }}
@@ -71,7 +73,12 @@ import { editChannel } from "../../chatServer";
                     </Form.Control.Feedback>
                 <div className='d-flex justify-content-end mt-3'>
                 <Button onClick={() => setShow(false)} className='btn-dark me-2'>Отменить</Button>
-                <Button type="submit" className='btn-info'>Отправить</Button>
+                <Button type="submit"
+                 className='btn-info'
+                 disabled={!blockSending ? false : true}
+                 >
+                  Отправить
+                </Button>
                 </div>
                 </Form>
               )}

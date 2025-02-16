@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import { useSelector } from 'react-redux';
 import { setChannels, switchChannel } from "../reducers/channelsReducer";
 import { setMessages } from "../reducers/messagesReducer";
+import { changeBlockSending } from "../reducers/usersReducer";
 import { setMessage } from "../chatServer";
 import { numWord } from "../helpers";
 import NewChannel from "./Modals/NewChannel";
@@ -25,9 +26,9 @@ import plus from "../assets/plus.svg";
 import arrow from "../assets/arrow.svg";
 
 const Slack = ({dispatch}) => {
-  const { activeChannel, channels } = useSelector(state => state.channelsReducer);
-  const { messages } = useSelector(state => state.messagesReducer);
-  const { username, token } = useSelector(state => state.usersReducer);
+  const { activeChannel, channels, firstLoadChannels } = useSelector(state => state.channelsReducer);
+  const { messages, firstLoadMessages } = useSelector(state => state.messagesReducer);
+  const { username, token, blockSending } = useSelector(state => state.usersReducer);
 
   const [newModal, newModalSet] = useState(false);
   const [editModal, editModalSet] = useState(false);
@@ -41,6 +42,12 @@ const Slack = ({dispatch}) => {
       dispatch(setMessages(token));
     }
   },[token])
+
+  useEffect(() => {
+    if (firstLoadChannels && firstLoadMessages) {
+      dispatch(changeBlockSending(false));
+    }
+  },[firstLoadChannels, firstLoadMessages])
 
   let activeMessages = [];
   
@@ -124,7 +131,7 @@ const Slack = ({dispatch}) => {
               [' сообщений', ' сообщение', ' сообщения']) : ''}
              </div>
           </div>
-          <div id="messages-box" className="overflow-auto py-3 px-0 p-sm-4 text-white fs-5 fs-md-6">
+          <div id="messages-box" className="overflow-auto py-3 px-0 p-sm-4 text-white fs-5 fs-md-6 mb-3">
             
             {activeMessages.length ?
               activeMessages.map(message => {
@@ -143,6 +150,7 @@ const Slack = ({dispatch}) => {
             message: "",
           }}
           onSubmit={(values) => {
+            dispatch(changeBlockSending(true));
             const nxtMessage = {
               body: values.message,
               channelId: activeChannel.id,
@@ -166,7 +174,7 @@ const Slack = ({dispatch}) => {
                     />
                     <Button variant="info" type="submit"
                      className="btn-group-vertical"
-                     disabled={values.message ? false : true}
+                     disabled={values.message && !blockSending ? false : true}
                      >
                       <Image src={arrow} />
                     </Button>
@@ -188,6 +196,7 @@ const Slack = ({dispatch}) => {
      channels={channels}
      token={token}
      dispatch={dispatch}
+     blockSending={blockSending}
     />
 
     <EditChannel
@@ -195,14 +204,18 @@ const Slack = ({dispatch}) => {
      setShow={editModalSet}
      channels={channels}
      token={token}
+     dispatch={dispatch}
      toEditChannel={toEditChannel}
+     blockSending={blockSending}
     />
 
     <DeleteChannel
      show={toDelModal}
      setShow={toDelModalSet}
      token={token}
+     dispatch={dispatch}
      delId={delId}
+     blockSending={blockSending}
     />
 
     </>

@@ -3,7 +3,8 @@ import { getMessages } from "../chatServer";
 import { removeChannel } from "./channelsReducer";
 
 const initialState = {
-  messages: {}
+  messages: {},
+  firstLoadMessages: false,
 };
 
 export const setMessages = createAsyncThunk(
@@ -26,6 +27,7 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(setMessages.fulfilled, (state, { payload }) => {
       state.messages = payload;
+      state.firstLoadMessages = true;
     }).addCase(setMessages.rejected, (state, { payload }) => {
       console.log(payload, 'Возникла ошибка');
     }).addCase(removeChannel, (state, { payload }) => {

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import * as Yup from "yup";
 import { regUser } from "../chatServer";
+import { changeBlockSending } from "../reducers/usersReducer";
 import tunnel from "../assets/tunnel2.png";
 import {
   Button,
@@ -36,6 +37,7 @@ const SignupSchema = Yup.object().shape({
 
 const Reg = ({ dispatch, setUser, navigate }) => {
   const { username, token } = useSelector(state => state.usersReducer);
+  const { blockSending } = useSelector(state => state.usersReducer);
   
   useEffect(() => {
     if (username || token) {
@@ -70,6 +72,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                         }}
                         validationSchema={SignupSchema}
                         onSubmit={(values) => {
+                          dispatch(changeBlockSending(true));
                           const userData = async () => {
                             const data = await regUser(values.nick, values.password);
                             if (data.token) {
@@ -82,6 +85,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                             navigate("/", { replace: false });
                             } else {
                               console.log('Запустите сервер');
+                              dispatch(changeBlockSending(false));
                             }
                             
                           }
@@ -163,6 +167,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                               variant="info"
                               className="w-100 mt-3"
                               type="submit"
+                              disabled={!blockSending ? false : true}
                             >
                               Зарегистрироваться
                             </Button>

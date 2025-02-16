@@ -6,6 +6,7 @@ const initialState = {
     channels: [],
     activeChannel: {},
     initiator: false,
+    firstLoadChannels: false,
   };
 
   export const setChannels = createAsyncThunk(
@@ -53,6 +54,7 @@ const initialState = {
       builder.addCase(setChannels.fulfilled, (state, { payload }) => {
         state.channels = payload;
         state.activeChannel = payload[0];
+        state.firstLoadChannels = true;
       }).addCase(setChannels.rejected, (state, { payload }) => {
         console.log(payload, 'Возникла ошибка');
       })

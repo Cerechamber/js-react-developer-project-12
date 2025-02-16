@@ -3,9 +3,10 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { setChannel } from "../../chatServer";
 import { setInitiator } from '../../reducers/channelsReducer';
+import { changeBlockSending } from '../../reducers/usersReducer';
 
 
- const NewChannel = ({ show, setShow, channels, token, dispatch }) => {
+ const NewChannel = ({ show, setShow, channels, token, dispatch, blockSending }) => {
 
   const validSchema = Yup.object().shape({
     title: Yup.string()
@@ -42,6 +43,7 @@ import { setInitiator } from '../../reducers/channelsReducer';
             }}
             validationSchema={validSchema}
             onSubmit={(values) => {
+              dispatch(changeBlockSending(true));
               dispatch(setInitiator(true));
               setChannel(token, {name: values.title});
               setShow(false);
@@ -63,7 +65,12 @@ import { setInitiator } from '../../reducers/channelsReducer';
                     </Form.Control.Feedback>
                 <div className='d-flex justify-content-end mt-3'>
                 <Button onClick={() => setShow(false)} className='btn-dark me-2'>Отменить</Button>
-                <Button type="submit" className='btn-info'>Отправить</Button>
+                <Button type="submit" 
+                  className='btn-info'
+                  disabled={!blockSending ? false : true}
+                >
+                  Отправить
+                </Button>
                 </div>
                 </Form>
               )}

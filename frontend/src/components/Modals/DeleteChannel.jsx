@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { removeChannel } from "../../chatServer";
+import { changeBlockSending } from '../../reducers/usersReducer';
 
- const DeleteChannel = ({ show, setShow, token, delId }) => {
+ const DeleteChannel = ({ show, setShow, token, dispatch, delId, blockSending }) => {
   
   const delButton = useRef(null);
 
@@ -34,6 +35,7 @@ import { removeChannel } from "../../chatServer";
         <Modal.Body>
                 <Form onSubmit={(e) => {
                     e.preventDefault();
+                    dispatch(changeBlockSending(true));
                     removeChannel(token, delId);
                     setShow(false);
                 }}>
@@ -43,7 +45,13 @@ import { removeChannel } from "../../chatServer";
                     
                 <div className='d-flex justify-content-end mt-3'>
                 <Button onClick={() => setShow(false)} className='btn-dark me-2'>Отменить</Button>
-                <Button type="submit" className='btn-danger' ref={delButton}>Удалить</Button>
+                <Button type="submit"
+                 className='btn-danger'
+                 ref={delButton}
+                 disabled={!blockSending ? false : true}
+                 >
+                Удалить
+                </Button>
                 </div>
                 </Form>
         </Modal.Body>
