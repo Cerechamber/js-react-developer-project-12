@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { authUser } from "../chatServer";
 import tunnel from "../assets/tunnel.png";
+import { useTranslation } from 'react-i18next';
 import { changeBlockSending } from "../reducers/usersReducer";
 import {
   Button,
@@ -18,6 +19,8 @@ import {
 } from "react-bootstrap";
 
 const Login = ({ dispatch, setUser, navigate }) => {
+
+  const { t, i18n } = useTranslation();
 
 const { username, token } = useSelector(state => state.usersReducer);
 const { blockSending } = useSelector(state => state.usersReducer);
@@ -51,7 +54,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                   <Col md={6}>
                     <Row className="flex-column justify-content-center h-100">
                       <Card.Title className="fs-2 text-center mb-3">
-                        Войти
+                        {t('go')}
                       </Card.Title>
                       <Formik
                        initialValues={{
@@ -71,8 +74,11 @@ const { blockSending } = useSelector(state => state.usersReducer);
                             values.nick = '';
                             values.password = '';
                             navigate("/", { replace: false });
-                          } else {
+                          } else if (data && data.status === 401) {
                             setError(true);
+                            dispatch(changeBlockSending(false));
+                          } else {
+                            console.log('Запустите сервер');
                             dispatch(changeBlockSending(false));
                           }
                         }

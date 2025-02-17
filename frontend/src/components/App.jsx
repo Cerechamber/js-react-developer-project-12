@@ -20,7 +20,6 @@ function App() {
   const userToken = localStorage.getItem("userToken");
   const userName = localStorage.getItem("userName");
   useEffect(() => {
-
     if ((!userToken || !userName) && location.pathname === "/") {
       navigate("/login", { replace: true });
     } else {
@@ -48,8 +47,6 @@ function App() {
       dispatch(removeChannel(payload));
       dispatch(changeBlockSending(false));
     });
-    
-
   },[]);
   return (
     <Routes>

@@ -5,7 +5,7 @@ export const regUser = (name, password) => {
         return response.data;
       })
       .catch(function (err) {
-        console.log(err);
+        return err;
        });
 }
 
@@ -14,7 +14,7 @@ export const authUser = (name, password) => {
         return response.data;
       })
       .catch(function (err) {
-       console.log(err);
+        return err;
       });
 }
 

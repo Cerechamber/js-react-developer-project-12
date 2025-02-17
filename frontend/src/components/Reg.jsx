@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import { Link } from "react-router-dom"; 
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import {
   Container,
   Card,
   Form,
+  Alert,
   FloatingLabel,
 } from "react-bootstrap";
 
@@ -38,6 +39,8 @@ const SignupSchema = Yup.object().shape({
 const Reg = ({ dispatch, setUser, navigate }) => {
   const { username, token } = useSelector(state => state.usersReducer);
   const { blockSending } = useSelector(state => state.usersReducer);
+
+  const [error, setError] = useState(false);
   
   useEffect(() => {
     if (username || token) {
@@ -75,7 +78,8 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                           dispatch(changeBlockSending(true));
                           const userData = async () => {
                             const data = await regUser(values.nick, values.password);
-                            if (data.token) {
+                            if (data && data.token) {
+                              setError(false);
                               dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
                             localStorage.setItem("userName", data.username);
@@ -83,11 +87,13 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                             values.password = '';
                             values.passwordConfirm = '';
                             navigate("/", { replace: false });
+                            } else if (data && data.status === 409) {
+                              setError(true);
+                              dispatch(changeBlockSending(false));
                             } else {
                               console.log('Запустите сервер');
                               dispatch(changeBlockSending(false));
                             }
-                            
                           }
                           userData();
                         }}
@@ -162,6 +168,12 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                                 {errors.passwordConfirm}
                               </Form.Control.Feedback>
                             </FloatingLabel>
+
+                            {error ? (
+                            <Alert variant="danger">
+                              Пользователь с таким логином уже существует
+                            </Alert>
+                            ) : null}
 
                             <Button
                               variant="info"
