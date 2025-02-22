@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import lost from "../assets/lost.png";
+import { useTranslation } from 'react-i18next';
 import {
   Row,
   Col,
@@ -8,6 +9,7 @@ import {
 } from "react-bootstrap";
 
 const NotFound = () => {
+  const { t } = useTranslation();
   return (
     <Container fluid={true} className="bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
       <Row className="justify-content-center align-items-center h-100 mx-1 mx-sm-4">
@@ -23,7 +25,7 @@ const NotFound = () => {
                 404
               </Card.Title>
               <Card.Subtitle className="text-center mb-auto">
-                Здесь ничего нет. <Link to='/'>Возвращайся назад</Link>
+                { t('nothingHere') } <Link to='/'>{ t('goBack') }</Link>
               </Card.Subtitle>
             </Card.Body>
           </Card>

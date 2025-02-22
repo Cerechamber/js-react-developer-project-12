@@ -20,7 +20,12 @@ import {
 
 const Login = ({ dispatch, setUser, navigate }) => {
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+
+  const AuthSchema = Yup.object().shape({
+    nick: Yup.string().required(t('valid.reqField')),
+    password: Yup.string().required(t('valid.reqField')),
+  });
 
 const { username, token } = useSelector(state => state.usersReducer);
 const { blockSending } = useSelector(state => state.usersReducer);
@@ -33,10 +38,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
 
 
   const [error, setError] = useState(false);
-  const AuthSchema = Yup.object().shape({
-    nick: Yup.string().required("Обязательное поле"),
-    password: Yup.string().required("Обязательное поле"),
-  });
+ 
   return (
     <Container fluid={true} className="auth bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">
       <Row className="justify-content-center align-items-center h-100 mx-1 mx-sm-4">
@@ -54,7 +56,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                   <Col md={6}>
                     <Row className="flex-column justify-content-center h-100">
                       <Card.Title className="fs-2 text-center mb-3">
-                        {t('go')}
+                        {t('auth')}
                       </Card.Title>
                       <Formik
                        initialValues={{
@@ -78,7 +80,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                             setError(true);
                             dispatch(changeBlockSending(false));
                           } else {
-                            console.log('Запустите сервер');
+                            console.log(t('serverOn'));
                             dispatch(changeBlockSending(false));
                           }
                         }
@@ -95,13 +97,13 @@ const { blockSending } = useSelector(state => state.usersReducer);
                           <Form onSubmit={handleSubmit}>
                           <FloatingLabel
                             controlId="nickAuth"
-                            label="Ваш ник"
+                            label={ t('nick') }
                             className="mb-3"
                           >
                             <Form.Control
                               type="text"
                               name="nick"
-                              placeholder="Ваш ник"
+                              placeholder={ t('nick') }
                               onChange={handleChange}
                               value={values.nick}
                               isInvalid={errors.nick && touched.nick}
@@ -114,13 +116,13 @@ const { blockSending } = useSelector(state => state.usersReducer);
   
                           <FloatingLabel
                             controlId="passwordAuth"
-                            label="Пароль"
+                            label={ t('password') }
                             className="mb-3"
                           >
                             <Form.Control
                               type="password"
                               name="password"
-                              placeholder="Пароль"
+                              placeholder={ t('password') }
                               onChange={handleChange}
                               value={values.password}
                               isInvalid={errors.password && touched.password}
@@ -133,7 +135,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
   
                           {error ? (
                             <Alert variant="danger">
-                              Неверные имя пользователя или пароль
+                              { t('errorLogin') }
                             </Alert>
                           ) : null}
                           <Button
@@ -142,7 +144,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                             type="submit"
                             disabled={!blockSending ? false : true}
                           >
-                            Войти
+                            { t('auth') }
                           </Button>
                         </Form>
                         )}
@@ -152,8 +154,8 @@ const { blockSending } = useSelector(state => state.usersReducer);
                 </Row>
               </Card.Body>
               <Card.Footer className="text-center pt-3 pb-2">
-                <Card.Subtitle className="mb-0">Нет аккаунта?</Card.Subtitle>
-                <Link to="/reg">Зарегистрироваться</Link>
+                <Card.Subtitle className="mb-0">{ t('noaccount') }</Card.Subtitle>
+                <Link to="/reg">{ t('regin') }</Link>
               </Card.Footer>
             </Card>
         </Col>

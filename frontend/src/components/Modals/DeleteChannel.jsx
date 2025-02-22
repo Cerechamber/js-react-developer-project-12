@@ -1,9 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import { removeChannel } from "../../chatServer";
+import { useTranslation } from 'react-i18next';
 import { changeBlockSending } from '../../reducers/usersReducer';
 
  const DeleteChannel = ({ show, setShow, token, dispatch, delId, blockSending }) => {
+
+  const { t } = useTranslation();
   
   const delButton = useRef(null);
 
@@ -29,7 +32,7 @@ import { changeBlockSending } from '../../reducers/usersReducer';
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter" className='text-white'>
-          Удалить канал
+          { t('deleteChannel') }
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -40,17 +43,17 @@ import { changeBlockSending } from '../../reducers/usersReducer';
                     setShow(false);
                 }}>
                    <Alert variant='dark' className='fs-5'>
-                    Уверены? 
+                    { t('sure') } 
                   </Alert>
                     
                 <div className='d-flex justify-content-end mt-3'>
-                <Button onClick={() => setShow(false)} className='btn-dark me-2'>Отменить</Button>
+                <Button onClick={() => setShow(false)} className='btn-dark me-2'>{ t('cancel') }</Button>
                 <Button type="submit"
                  className='btn-danger'
                  ref={delButton}
                  disabled={!blockSending ? false : true}
                  >
-                Удалить
+                { t('delete') }
                 </Button>
                 </div>
                 </Form>

@@ -2,21 +2,24 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { setChannel } from "../../chatServer";
+import { useTranslation } from 'react-i18next';
 import { setInitiator } from '../../reducers/channelsReducer';
 import { changeBlockSending } from '../../reducers/usersReducer';
 
 
  const NewChannel = ({ show, setShow, channels, token, dispatch, blockSending }) => {
 
+  const { t } = useTranslation();
+
   const validSchema = Yup.object().shape({
     title: Yup.string()
-      .required("Обязательное поле")
-      .min(3, "Минимум 3 символа")
-      .max(20, "Максимум 20 символов")
+      .required(t('valid.reqField'))
+      .min(3, t('valid.min3'))
+      .max(20, t('valid.max20'))
       .test({
         test(value, ctx) {
           if (channels.find(c => c.name === value)) {
-            return ctx.createError({ message: 'Наименование канала должно быть уникальным' });
+            return ctx.createError({ message: t('valid.uniqueName') });
           }
           return true
         }
@@ -33,7 +36,7 @@ import { changeBlockSending } from '../../reducers/usersReducer';
       >
         <Modal.Header>
           <Modal.Title id="contained-modal-title-vcenter" className='text-white'>
-            Добавить канал
+            { t('addChannel') }
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -64,12 +67,12 @@ import { changeBlockSending } from '../../reducers/usersReducer';
                        {errors.title}
                     </Form.Control.Feedback>
                 <div className='d-flex justify-content-end mt-3'>
-                <Button onClick={() => setShow(false)} className='btn-dark me-2'>Отменить</Button>
+                <Button onClick={() => setShow(false)} className='btn-dark me-2'>{ t('cancel') }</Button>
                 <Button type="submit" 
                   className='btn-info'
                   disabled={!blockSending ? false : true}
                 >
-                  Отправить
+                  { t('send') }
                 </Button>
                 </div>
                 </Form>

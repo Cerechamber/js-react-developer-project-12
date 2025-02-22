@@ -5,7 +5,7 @@ import { setChannels, switchChannel } from "../reducers/channelsReducer";
 import { setMessages } from "../reducers/messagesReducer";
 import { changeBlockSending } from "../reducers/usersReducer";
 import { setMessage } from "../chatServer";
-import { numWord } from "../helpers";
+import { useTranslation } from 'react-i18next';
 import NewChannel from "./Modals/NewChannel";
 import EditChannel from "./Modals/EditChannel";
 import DeleteChannel from "./Modals/DeleteChannel";
@@ -26,6 +26,7 @@ import plus from "../assets/plus.svg";
 import arrow from "../assets/arrow.svg";
 
 const Slack = ({dispatch}) => {
+  const { t } = useTranslation();
   const { activeChannel, channels, firstLoadChannels } = useSelector(state => state.channelsReducer);
   const { messages, firstLoadMessages } = useSelector(state => state.messagesReducer);
   const { username, token, blockSending } = useSelector(state => state.usersReducer);
@@ -63,7 +64,7 @@ const Slack = ({dispatch}) => {
       <Row className="justify-content-center shadow-lg h-100 mx-0 mx-sm-4 rounded-3 py-4">
           <Col lg={2} md={3} xs={4} className="h-100 d-flex flex-column">
           <div className="d-flex justify-content-between align-items-center px-0 px-sm-2">
-            <div className="text-white fs-5 fw-bold channels-title">Каналы</div>
+            <div className="text-white fs-5 fw-bold channels-title">{ t('channels') }</div>
             <Button variant="info" className="btn-group-vertical p-0 p-sm-2 summonModal" onClick={() => newModalSet(true)}>
               <Image src={plus} alt=" " />
             </Button>
@@ -95,7 +96,7 @@ const Slack = ({dispatch}) => {
                       toDelModalSet(true);
                      }}
                     >
-                      Удалить
+                      { t('delete') }
                     </Dropdown.Item>
                     <Dropdown.Item
                      eventKey="2"
@@ -104,7 +105,7 @@ const Slack = ({dispatch}) => {
                       editModalSet(true);
                      }}
                      >
-                      Переименовать
+                      { t('rename') }
                      </Dropdown.Item>
                   </Dropdown.Menu>
                   </Dropdown>
@@ -124,15 +125,11 @@ const Slack = ({dispatch}) => {
         <Col lg={7} md={9} xs={8} className="d-flex flex-column h-100">
           <div className="bg-info p-2 p-sm-3">
             <div className="fw-bold"># {activeChannel.name ? activeChannel.name : ''}</div>
-            <div>{activeMessages.length ?
-             activeMessages.length : ''}
-             {activeMessages.length ?
-             numWord(activeMessages.length,
-              [' сообщений', ' сообщение', ' сообщения']) : ''}
+            <div>
+             { t('key', { count: activeMessages.length }) }
              </div>
           </div>
           <div id="messages-box" className="overflow-auto py-3 px-0 p-sm-4 text-white fs-5 fs-md-6 mb-3">
-            
             {activeMessages.length ?
               activeMessages.map(message => {
                 return (
@@ -168,7 +165,7 @@ const Slack = ({dispatch}) => {
                       type="text"
                       value={values.message}
                       onChange={handleChange}
-                      placeholder="Введите сообщение..."
+                      placeholder={ t('writeSmth') }
                       style={{borderRadius: '0'}}
                       className="rounded-start"
                     />

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { io } from "socket.io-client";
 import Layout from "./Layout";
 import Slack from "./Slack";
 import Login from "./Login";
@@ -9,9 +8,7 @@ import Reg from "./Reg";
 import NotFound from "./NotFound";
 import "../App.css";
 
-import { setUser, changeBlockSending } from "../reducers/usersReducer";
-import { newMessage } from "../reducers/messagesReducer";
-import { switchChannel, renameChannel, removeChannel } from "../reducers/channelsReducer";
+import { setUser } from "../reducers/usersReducer";
 
 function App() {
   const navigate = useNavigate();
@@ -25,28 +22,6 @@ function App() {
     } else {
       dispatch(setUser({ username: userName, token: userToken }));
     }
-
-    const socket = io("ws://localhost:5001");
-    
-    socket.on('newMessage', (payload) => { 
-      dispatch(newMessage(payload));
-      dispatch(changeBlockSending(false));
-    });
-   
-    socket.on('newChannel', (payload) => {
-      dispatch(switchChannel(payload));
-      dispatch(changeBlockSending(false));
-    });
-
-    socket.on('renameChannel', (payload) => {
-      dispatch(renameChannel(payload));
-      dispatch(changeBlockSending(false));
-    });
-
-    socket.on('removeChannel', (payload) => {
-      dispatch(removeChannel(payload));
-      dispatch(changeBlockSending(false));
-    });
   },[]);
   return (
     <Routes>

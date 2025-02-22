@@ -11,6 +11,12 @@
   height: 100%;
 }
 
+.lang {
+  width: 40px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
 @media (max-width: 565px) {
   .auth__img {
     max-height: 18vh;

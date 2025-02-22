@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import * as Yup from "yup";
 import { regUser } from "../chatServer";
+import { useTranslation } from 'react-i18next';
 import { changeBlockSending } from "../reducers/usersReducer";
 import tunnel from "../assets/tunnel2.png";
 import {
@@ -20,23 +21,22 @@ import {
 const passwordMatch =
   /^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=\D*\d)(?=[^!#%]*[!#%])[A-Za-z0-9!#%]{8,32}$/;
 
-const SignupSchema = Yup.object().shape({
-  nick: Yup.string()
-    .required("Обязательное поле")
-    .min(4, "Минимум 4 символа")
-    .max(25, "Максимум 25 символов"),
-  password: Yup.string()
-    .required("Обязательное поле")
-    .min(8, "Минимум 8 символов")
-    .max(32, "Максимум 32 символов")
-    .matches(passwordMatch, `Пароль должен содержать как минимум 1 букву нижнего регистра, минимум
-       1 заглавную букву, не менее 1 числа, как минимум 1 специальный символ(!#%). Только латиница.`),
-  passwordConfirm: Yup.string()
-    .required("Обязательное поле")
-    .oneOf([Yup.ref("password"), null], "Пароли должны совпадать"),
-});
-
 const Reg = ({ dispatch, setUser, navigate }) => {
+  const { t } = useTranslation();
+  const SignupSchema = Yup.object().shape({
+    nick: Yup.string()
+      .required(t('valid.reqField'))
+      .min(4, t('valid.min4'))
+      .max(25,  t('valid.max25')),
+    password: Yup.string()
+      .required(t('valid.reqField'))
+      .min(8, t('valid.min8'))
+      .max(32, t('valid.max32'))
+      .matches(passwordMatch, t('valid.match')),
+    passwordConfirm: Yup.string()
+      .required(t('valid.reqField'))
+      .oneOf([Yup.ref("password"), null], t('valid.samePasswords')),
+  });
   const { username, token } = useSelector(state => state.usersReducer);
   const { blockSending } = useSelector(state => state.usersReducer);
 
@@ -65,7 +65,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                   <Col md={6}>
                     <Row className="flex-column justify-content-center h-100">
                       <Card.Title className="fs-2 text-center mb-3">
-                        Регистрация
+                        { t('registration') }
                       </Card.Title>
                       <Formik
                         initialValues={{
@@ -91,7 +91,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                               setError(true);
                               dispatch(changeBlockSending(false));
                             } else {
-                              console.log('Запустите сервер');
+                              console.log(t('serverOn'));
                               dispatch(changeBlockSending(false));
                             }
                           }
@@ -108,13 +108,13 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                           <Form onSubmit={handleSubmit}>
                             <FloatingLabel
                               controlId="nickAuth"
-                              label="Ваш ник"
+                              label={ t('nick') }
                               className="mb-3"
                             >
                               <Form.Control
                                 type="text"
                                 name="nick"
-                                placeholder="Ваш ник"
+                                placeholder={ t('nick') }
                                 onChange={handleChange}
                                 value={values.nick}
                                 isInvalid={errors.nick && touched.nick}
@@ -127,13 +127,13 @@ const Reg = ({ dispatch, setUser, navigate }) => {
 
                             <FloatingLabel
                               controlId="passwordAuth"
-                              label="Пароль"
+                              label={ t('password') }
                               className="mb-3"
                             >
                               <Form.Control
                                 type="password"
                                 name="password"
-                                placeholder="Пароль"
+                                placeholder={ t('password') }
                                 onChange={handleChange}
                                 value={values.password}
                                 isInvalid={errors.password && touched.password}
@@ -146,13 +146,13 @@ const Reg = ({ dispatch, setUser, navigate }) => {
 
                             <FloatingLabel
                               controlId="passwordAuthConfirm"
-                              label="Подтвердите пароль"
+                              label={ t('confirmPassword') }
                               className="mb-3"
                             >
                               <Form.Control
                                 type="password"
                                 name="passwordConfirm"
-                                placeholder="Подтвердите пароль"
+                                placeholder={ t('confirmPassword') }
                                 onChange={handleChange}
                                 value={values.passwordConfirm}
                                 isInvalid={
@@ -171,7 +171,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
 
                             {error ? (
                             <Alert variant="danger">
-                              Пользователь с таким логином уже существует
+                              { t('loginExists') }
                             </Alert>
                             ) : null}
 
@@ -181,7 +181,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                               type="submit"
                               disabled={!blockSending ? false : true}
                             >
-                              Зарегистрироваться
+                              { t('regin') }
                             </Button>
                           </Form>
                         )}
@@ -191,8 +191,8 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                 </Row>
               </Card.Body>
               <Card.Footer className="text-center pt-3 pb-2">
-              <Card.Subtitle className="mb-0">Вспомнился пароль?</Card.Subtitle>
-                <Link to="/login">Авторизоваться</Link>
+              <Card.Subtitle className="mb-0">{ t('rememberPassword') }</Card.Subtitle>
+                <Link to="/login">{ t('authin') }</Link>
               </Card.Footer>
             </Card>
         </Col>

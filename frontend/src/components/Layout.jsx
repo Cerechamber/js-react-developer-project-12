@@ -1,8 +1,19 @@
 import { Outlet, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Container, Navbar, Button } from "react-bootstrap";
+import { useTranslation } from 'react-i18next';
+import { Container, Navbar, Button, Image } from "react-bootstrap";
+import en from "../assets/en.png";
+import ru from "../assets/ru.png";
+
 const Layout = ({ dispatch, setUser, navigate }) => {
+  const { t, i18n } = useTranslation();
   const { token } = useSelector((state) => state.usersReducer);
+  
+  const handleLangSwitch = (e) => {
+    const lang = e.target.dataset.lang;
+    lang === 'ru' ? i18n.changeLanguage('en') : i18n.changeLanguage('ru');
+  }
+
   const getOut = () => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("userName");
@@ -23,11 +34,21 @@ const Layout = ({ dispatch, setUser, navigate }) => {
               Slack Chat
             </Link>
 
+            <div>
             {token ? (
               <Button variant="outline-info" onClick={() => getOut()}>
-                Выйти
+                { t('getOut') }
               </Button>
             ) : null}
+
+            <Image
+            data-lang={ i18n.language }
+            onClick={handleLangSwitch}
+            src={ i18n.language === 'ru' ? en : ru } 
+            alt=" "
+            className="lang"
+             />
+            </div>
           </Container>
         </Navbar>
 
