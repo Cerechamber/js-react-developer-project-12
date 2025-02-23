@@ -1,12 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
-import { removeChannel } from "../../chatServer";
+import { useServer } from "../../../contexts/ChatProvider";
 import { useTranslation } from 'react-i18next';
-import { changeBlockSending } from '../../reducers/usersReducer';
+import { changeBlockSending } from '../../../reducers/usersReducer';
 
  const DeleteChannel = ({ show, setShow, token, dispatch, delId, blockSending }) => {
 
   const { t } = useTranslation();
+
+  const { deleteChannel } = useServer();
   
   const delButton = useRef(null);
 
@@ -39,7 +41,7 @@ import { changeBlockSending } from '../../reducers/usersReducer';
                 <Form onSubmit={(e) => {
                     e.preventDefault();
                     dispatch(changeBlockSending(true));
-                    removeChannel(token, delId);
+                    deleteChannel(token, delId);
                     setShow(false);
                 }}>
                    <Alert variant='dark' className='fs-5'>

@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import { getChannels } from "../chatServer";
+import axios from "axios";
 
 const initialState = {
     channels: [],
@@ -8,6 +7,16 @@ const initialState = {
     initiator: false,
     firstLoadChannels: false,
   };
+
+  const getChannels = (token) => {
+    return axios.get('/api/v1/channels', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((response) => {
+        return response.data;
+      });
+};
 
   export const setChannels = createAsyncThunk(
     'chat/setChannels',

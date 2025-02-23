@@ -6,7 +6,7 @@ import resources from './locales/index.js';
 import store from "./reducers/index.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./components/App.jsx";
-import SocketIoProvider from "./contexts/SocketProvider.jsx";
+import ChatProvider from "./contexts/ChatProvider.jsx";
 import { io } from "socket.io-client";
 
 const init = async () => {
@@ -27,11 +27,11 @@ await i18n
   return (
    <Provider store={store}>
     <BrowserRouter>
-      <SocketIoProvider socket={socket}>
+      <ChatProvider socket={socket}>
         <I18nextProvider i18next={i18n}>
           <App />
         </I18nextProvider>
-      </SocketIoProvider>
+      </ChatProvider>
     </BrowserRouter>
   </Provider>
   )

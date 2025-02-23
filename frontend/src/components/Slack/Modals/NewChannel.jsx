@@ -1,15 +1,17 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { setChannel } from "../../chatServer";
+import { useServer } from "../../../contexts/ChatProvider";
 import { useTranslation } from 'react-i18next';
-import { setInitiator } from '../../reducers/channelsReducer';
-import { changeBlockSending } from '../../reducers/usersReducer';
+import { setInitiator } from '../../../reducers/channelsReducer';
+import { changeBlockSending } from '../../../reducers/usersReducer';
 
 
  const NewChannel = ({ show, setShow, channels, token, dispatch, blockSending }) => {
 
   const { t } = useTranslation();
+
+  const { setChannel } = useServer();
 
   const validSchema = Yup.object().shape({
     title: Yup.string()

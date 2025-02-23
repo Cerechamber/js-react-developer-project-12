@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Layout from "./Layout";
-import Slack from "./Slack";
+import Chat from "./Slack/Chat";
 import Login from "./Login";
 import Reg from "./Reg";
 import NotFound from "./NotFound";
@@ -36,7 +36,7 @@ function App() {
         }
       >
         <Route index element={
-          <Slack
+          <Chat
           dispatch={dispatch}
           />
         }

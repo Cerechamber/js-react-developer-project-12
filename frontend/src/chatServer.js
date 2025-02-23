@@ -18,65 +18,7 @@ export const authUser = (name, password) => {
       });
 }
 
-export const getChannels = (token) => {
-    return axios.get('/api/v1/channels', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((response) => {
-        return response.data;
-      });
-}
 
-export const getMessages = (token) => {
-  return axios.get('/api/v1/messages', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((response) => {
-    return response.data;
-  });
-};
-
-export const setMessage = (token, message) => {
-  return axios.post('/api/v1/messages', message, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).catch(function (err) {
-    console.log(err);
-   });
-};
-
-export const setChannel = (token, newChannel) => {
-  return axios.post('/api/v1/channels', newChannel, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).catch(function (err) {
-    console.log(err);
-   });
-}
-
-export const editChannel = (token, editedChannel, id) => {
-axios.patch(`/api/v1/channels/${id}`, editedChannel, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-}).catch(function (err) {
-  console.log(err);
- });
-}
-
-export const removeChannel = (token, id) => {
-  axios.delete(`/api/v1/channels/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).catch(function (err) {
-    console.log(err);
-   });
-  }
 
 
 

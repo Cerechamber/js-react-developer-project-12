@@ -1,10 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getMessages } from "../chatServer";
+import axios from "axios";
 import { removeChannel } from "./channelsReducer";
 
 const initialState = {
   messages: {},
   firstLoadMessages: false,
+};
+
+   const getMessages = (token) => {
+  return axios.get('/api/v1/messages', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => {
+    return response.data;
+  });
 };
 
 export const setMessages = createAsyncThunk(
