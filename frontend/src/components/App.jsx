@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Layout from "./Layout";
 import Chat from "./Slack/Chat";
@@ -7,22 +6,13 @@ import Login from "./Login";
 import Reg from "./Reg";
 import NotFound from "./NotFound";
 import "../App.css";
-
 import { setUser } from "../reducers/usersReducer";
 
 function App() {
+  
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
-  const userToken = localStorage.getItem("userToken");
-  const userName = localStorage.getItem("userName");
-  useEffect(() => {
-    if ((!userToken || !userName) && location.pathname === "/") {
-      navigate("/login", { replace: true });
-    } else {
-      dispatch(setUser({ username: userName, token: userToken }));
-    }
-  },[]);
+
   return (
     <Routes>
       <Route

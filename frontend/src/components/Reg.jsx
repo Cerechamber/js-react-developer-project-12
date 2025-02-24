@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import { Link } from "react-router-dom"; 
 import { useSelector } from 'react-redux';
 import * as Yup from "yup";
-import { regUser } from "../chatServer";
+import { getAuth } from "../contexts/AuthProvider";
 import { useTranslation } from 'react-i18next';
 import { changeBlockSending } from "../reducers/usersReducer";
 import tunnel from "../assets/tunnel2.png";
@@ -22,6 +22,7 @@ const passwordMatch =
   /^(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z])(?=\D*\d)(?=[^!#%]*[!#%])[A-Za-z0-9!#%]{8,32}$/;
 
 const Reg = ({ dispatch, setUser, navigate }) => {
+  const { regUser } = getAuth();
   const { t } = useTranslation();
   const SignupSchema = Yup.object().shape({
     nick: Yup.string()
@@ -37,16 +38,9 @@ const Reg = ({ dispatch, setUser, navigate }) => {
       .required(t('valid.reqField'))
       .oneOf([Yup.ref("password"), null], t('valid.samePasswords')),
   });
-  const { username, token } = useSelector(state => state.usersReducer);
   const { blockSending } = useSelector(state => state.usersReducer);
 
   const [error, setError] = useState(false);
-  
-  useEffect(() => {
-    if (username || token) {
-      navigate("/", { replace: true });
-    }
-  },[token, username]);
 
   return (
     <Container fluid={true} className="auth bg-dark bg-gradient h-100 overflow-hidden py-3 py-sm-4 px-0">

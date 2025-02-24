@@ -2,7 +2,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
-import AuthProvider from "./contexts/authProvider.jsx";
+import AuthProvider from "./contexts/AuthProvider.jsx";
 import resources from './locales/index.js';
 import store from "./reducers/index.js";
 import "bootstrap/dist/css/bootstrap.min.css";

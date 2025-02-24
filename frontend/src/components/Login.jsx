@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
-import { authUser } from "../chatServer";
+import { getAuth } from "../contexts/AuthProvider";
 import tunnel from "../assets/tunnel.png";
 import { useTranslation } from 'react-i18next';
 import { changeBlockSending } from "../reducers/usersReducer";
@@ -20,6 +20,8 @@ import {
 
 const Login = ({ dispatch, setUser, navigate }) => {
 
+  const { authUser } = getAuth();
+
   const { t } = useTranslation();
 
   const AuthSchema = Yup.object().shape({
@@ -27,15 +29,7 @@ const Login = ({ dispatch, setUser, navigate }) => {
     password: Yup.string().required(t('valid.reqField')),
   });
 
-const { username, token } = useSelector(state => state.usersReducer);
 const { blockSending } = useSelector(state => state.usersReducer);
-  
-  useEffect(() => {
-    if (username || token) {
-      navigate("/", { replace: true });
-    }
-  },[token, username]);
-
 
   const [error, setError] = useState(false);
  

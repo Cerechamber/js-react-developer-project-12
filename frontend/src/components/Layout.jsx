@@ -1,11 +1,13 @@
 import { Outlet, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from 'react-i18next';
+import { getAuth } from "../contexts/AuthProvider";
 import { Container, Navbar, Button, Image } from "react-bootstrap";
 import en from "../assets/en.png";
 import ru from "../assets/ru.png";
 
-const Layout = ({ dispatch, setUser, navigate }) => {
+const Layout = () => {
+  const { authOut } = getAuth();
   const { t, i18n } = useTranslation();
   const { token } = useSelector((state) => state.usersReducer);
   
@@ -14,12 +16,6 @@ const Layout = ({ dispatch, setUser, navigate }) => {
     lang === 'ru' ? i18n.changeLanguage('en') : i18n.changeLanguage('ru');
   }
 
-  const getOut = () => {
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("userName");
-    dispatch(setUser({}));
-    navigate("/login", { replace: true });
-  };
   return (
     <div
       className="d-flex flex-column h-100 chat bg-dark bg-gradient"
@@ -36,7 +32,7 @@ const Layout = ({ dispatch, setUser, navigate }) => {
 
             <div>
             {token ? (
-              <Button variant="outline-info" onClick={() => getOut()}>
+              <Button variant="outline-info" onClick={() => authOut()}>
                 { t('getOut') }
               </Button>
             ) : null}
