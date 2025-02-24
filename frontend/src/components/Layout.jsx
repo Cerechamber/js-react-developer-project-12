@@ -40,7 +40,7 @@ const Layout = () => {
             <Image
             data-lang={ i18n.language }
             onClick={handleLangSwitch}
-            src={ i18n.language === 'ru' ? en : ru } 
+            src={ i18n.language === 'ru' ? en : ru }
             alt=" "
             className="lang"
              />

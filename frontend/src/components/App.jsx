@@ -18,11 +18,7 @@ function App() {
       <Route
         path="/"
         element={
-          <Layout
-            dispatch={dispatch}
-            setUser={setUser}
-            navigate={navigate}
-          />
+          <Layout />
         }
       >
         <Route index element={
