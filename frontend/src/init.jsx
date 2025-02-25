@@ -19,7 +19,7 @@ await i18n
   .init({
     resources,
     debug: true,
-    fallbackLng: 'ru',
+    fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
     },
@@ -28,9 +28,9 @@ await i18n
   const socket = io("ws://localhost:5001");
 
   return (
+    <Provider store={store}>
     <I18nextProvider i18next={i18n}>
     <ToastProvider>
-   <Provider store={store}>
       <ChatProvider socket={socket}>
         <BrowserRouter>
           <AuthProvider>
@@ -38,12 +38,15 @@ await i18n
           </AuthProvider>
         </BrowserRouter>
       </ChatProvider>
-      <ToastContainer />
-  </Provider>
   </ToastProvider>
+  <ToastContainer
+    autoClose={3000}
+    position="bottom-right"
+    theme="dark"
+  />
   </I18nextProvider>
+  </Provider>
   )
-
 }
 
 export default init;

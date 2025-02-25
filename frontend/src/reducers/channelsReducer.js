@@ -1,22 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { getChannels } from "../contexts/ChatProvider";
 
 const initialState = {
     channels: [],
     activeChannel: {},
     initiator: false,
     firstLoadChannels: false,
+    errorLoadChannels: false,
   };
-
-  const getChannels = (token) => {
-    return axios.get('/api/v1/channels', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((response) => {
-        return response.data;
-      });
-};
 
   export const setChannels = createAsyncThunk(
     'chat/setChannels',
@@ -64,8 +55,9 @@ const initialState = {
         state.channels = payload;
         state.activeChannel = payload[0];
         state.firstLoadChannels = true;
+        state.errorLoadChannels = false;
       }).addCase(setChannels.rejected, (state, { payload }) => {
-        console.log(payload, 'Возникла ошибка');
+            state.errorLoadChannels = true;
       })
     }
   });

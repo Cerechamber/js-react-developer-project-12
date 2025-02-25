@@ -39,5 +39,11 @@ export default {
       "addChannel": "Add channel",
       "deleteChannel": "Delete channel",
       "sure": "Are you sure?",
-    }
+    "notify": {
+        "addChannel": "Channel added!",
+        "editChannel": "The channel has been renamed!",
+        "deleteChannel": "Channel deleted!",
+        "errorLoading": "Error loading data!"
+      }
   }
+}

@@ -1,20 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { removeChannel } from "./channelsReducer";
+import { getMessages } from "../contexts/ChatProvider";
 
 const initialState = {
   messages: {},
   firstLoadMessages: false,
-};
-
-   const getMessages = (token) => {
-  return axios.get('/api/v1/messages', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((response) => {
-    return response.data;
-  });
+  errorLoadMessages: false,
 };
 
 export const setMessages = createAsyncThunk(
@@ -38,8 +29,9 @@ const slice = createSlice({
     builder.addCase(setMessages.fulfilled, (state, { payload }) => {
       state.messages = payload;
       state.firstLoadMessages = true;
+      state.errorLoadMessages = false;
     }).addCase(setMessages.rejected, (state, { payload }) => {
-      console.log(payload, 'Возникла ошибка');
+         state.errorLoadMessages = true;
     }).addCase(removeChannel, (state, { payload }) => {
       const newMessages = state.messages.filter(m => m.channelId !== payload.id);
       state.messages = newMessages;

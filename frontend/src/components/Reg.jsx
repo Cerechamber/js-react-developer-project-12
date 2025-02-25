@@ -72,7 +72,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                           dispatch(changeBlockSending(true));
                           const userData = async () => {
                             const data = await regUser(values.nick, values.password);
-                            if (data && data.token) {
+                            if (data.token) {
                               setError(false);
                               dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
@@ -81,12 +81,8 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                             values.password = '';
                             values.passwordConfirm = '';
                             navigate("/", { replace: false });
-                            } else if (data && data.status === 409) {
+                            } else if (data !== 'no-connection') {
                               setError(true);
-                              dispatch(changeBlockSending(false));
-                            } else {
-                              console.log(t('serverOn'));
-                              dispatch(changeBlockSending(false));
                             }
                           }
                           userData();

@@ -2,11 +2,16 @@ import { createContext, useContext, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { setUser } from "../reducers/usersReducer";
+import { useTranslation } from 'react-i18next';
+import { useToast } from "./ToastProvider";
+import { setUser, changeBlockSending } from "../reducers/usersReducer";
 
 const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
+
+  const { notify } = useToast();
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +39,14 @@ const AuthProvider = ({ children }) => {
              return response.data;
            })
            .catch(function (err) {
-             return err;
+            if (err.status === 409) {
+              dispatch(changeBlockSending(false));
+              return err
+            } else {
+              notify(t('notify.errorLoading'));
+              dispatch(changeBlockSending(false));
+              return 'no-connection';
+            }
             });
      }
      
@@ -43,7 +55,14 @@ const AuthProvider = ({ children }) => {
              return response.data;
            })
            .catch(function (err) {
-             return err;
+            if (err.status === 401) {
+              dispatch(changeBlockSending(false));
+              return err
+            } else {
+              notify(t('notify.errorLoading'));
+              dispatch(changeBlockSending(false));
+              return 'no-connection';
+            }
            });
      }
 

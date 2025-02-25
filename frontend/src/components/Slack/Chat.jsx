@@ -3,6 +3,8 @@ import { setChannels } from "../../reducers/channelsReducer";
 import { setMessages } from "../../reducers/messagesReducer";
 import { changeBlockSending } from "../../reducers/usersReducer";
 import { useSelector } from 'react-redux';
+import { useToast } from "../../contexts/ToastProvider";
+import { useTranslation } from 'react-i18next';
 import Messages from "./Messages";
 import Channels from "./Channels";
 import pank from "../../assets/pank.png";
@@ -14,9 +16,12 @@ import {
 } from "react-bootstrap";
 
 const Chat = ({dispatch}) => {
-  const { activeChannel, firstLoadChannels } = useSelector(state => state.channelsReducer);
-  const { firstLoadMessages } = useSelector(state => state.messagesReducer);
+  const { activeChannel, firstLoadChannels, errorLoadChannels } = useSelector(state => state.channelsReducer);
+  const { firstLoadMessages, errorLoadMessages } = useSelector(state => state.messagesReducer);
   const { username, token, blockSending } = useSelector(state => state.usersReducer);
+  const { t } = useTranslation();
+  const { notify } = useToast();
+
   useEffect(() => {
     if (token) {
       dispatch(setChannels(token));
@@ -29,6 +34,10 @@ const Chat = ({dispatch}) => {
       dispatch(changeBlockSending(false));
     }
   },[firstLoadChannels, firstLoadMessages]);
+
+  useEffect(() => {
+    errorLoadChannels || errorLoadMessages ? notify(t('notify.errorLoading')) : null;
+  },[errorLoadMessages, errorLoadChannels]);
 
   return (
     <>

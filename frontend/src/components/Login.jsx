@@ -62,7 +62,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                         dispatch(changeBlockSending(true));
                         const userData = async () => {
                           const data = await authUser(values.nick, values.password);
-                          if (data && data.token) {
+                          if (data.token) {
                             setError(false);
                             dispatch(setUser(data));
                             localStorage.setItem("userToken", data.token);
@@ -70,12 +70,8 @@ const { blockSending } = useSelector(state => state.usersReducer);
                             values.nick = '';
                             values.password = '';
                             navigate("/", { replace: false });
-                          } else if (data && data.status === 401) {
+                          } else if (data !== 'no-connection') {
                             setError(true);
-                            dispatch(changeBlockSending(false));
-                          } else {
-                            console.log(t('serverOn'));
-                            dispatch(changeBlockSending(false));
                           }
                         }
                         userData();

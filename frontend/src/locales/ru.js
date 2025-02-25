@@ -40,5 +40,11 @@ export default {
       "addChannel": "Добавить канал",
       "deleteChannel": "Удалить канал",
       "sure": "Уверены?",
+      "notify": {
+      "addChannel": "Канал добавлен!",
+      "editChannel": "Канал переименован!",
+      "deleteChannel": "Канал удален!",
+      "errorLoading": "Ошибка при загрузке данных!"
+     } 
     }
   }

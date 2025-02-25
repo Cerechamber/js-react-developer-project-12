@@ -1,14 +1,20 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useTranslation } from 'react-i18next';
 import { changeBlockSending } from "../reducers/usersReducer";
 import { newMessage } from "../reducers/messagesReducer";
 import { switchChannel, renameChannel, removeChannel } from "../reducers/channelsReducer";
+import { useToast } from "./ToastProvider";
 
 const ChatContext = createContext({});
 
 const ChatProvider = ({socket, children}) => {
+
     const dispatch = useDispatch();
+    const { notify } = useToast();
+
+    const { t } = useTranslation();
     
     useEffect(() => {
         socket.on('newMessage', (payload) => { 
@@ -19,16 +25,19 @@ const ChatProvider = ({socket, children}) => {
         socket.on('newChannel', (payload) => {
             dispatch(switchChannel(payload));
             dispatch(changeBlockSending(false));
+            notify(t('notify.addChannel'));
           });
       
         socket.on('renameChannel', (payload) => {
             dispatch(renameChannel(payload));
             dispatch(changeBlockSending(false));
+            notify(t('notify.editChannel'));
           });
       
         socket.on('removeChannel', (payload) => {
             dispatch(removeChannel(payload));
             dispatch(changeBlockSending(false));
+            notify(t('notify.deleteChannel'));
           });
     },[])
   
@@ -39,6 +48,8 @@ const ChatProvider = ({socket, children}) => {
       },
     }).catch(function (err) {
       console.log(err);
+      notify(t('notify.errorLoading'));
+      dispatch(changeBlockSending(false));
      });
   };
   
@@ -49,6 +60,8 @@ const ChatProvider = ({socket, children}) => {
       },
     }).catch(function (err) {
       console.log(err);
+      notify(t('notify.errorLoading'));
+      dispatch(changeBlockSending(false));
      });
   };
   
@@ -59,6 +72,8 @@ const ChatProvider = ({socket, children}) => {
     },
   }).catch(function (err) {
     console.log(err);
+    notify(t('notify.errorLoading'));
+    dispatch(changeBlockSending(false));
    });
   };
   
@@ -69,6 +84,8 @@ const ChatProvider = ({socket, children}) => {
       },
     }).catch(function (err) {
       console.log(err);
+      notify(t('notify.errorLoading'));
+      dispatch(changeBlockSending(false));
      });
     };
 
@@ -79,8 +96,6 @@ const ChatProvider = ({socket, children}) => {
       deleteChannel
     }),[]);
 
-
-
     return (
         <ChatContext.Provider value={serverActions}>
           {children}
@@ -89,6 +104,26 @@ const ChatProvider = ({socket, children}) => {
 }
 
 export const useServer = () => useContext(ChatContext);
+
+export const getChannels = (token) => {
+  return axios.get('/api/v1/channels', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      return response.data;
+    });
+};
+
+export const getMessages = (token) => {
+  return axios.get('/api/v1/messages', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => {
+    return response.data;
+  });
+};
 
 
 export default ChatProvider;
