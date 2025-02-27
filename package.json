@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/Cerechamber/js-react-developer-project-12#readme",
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4"
+    "@cerechamber/chat-server": "^3.0.0"
   }
 }
