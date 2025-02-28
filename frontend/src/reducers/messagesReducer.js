@@ -44,5 +44,5 @@ const slice = createSlice({
   }
 });
 
-export const { newMessage, changeMessageField } = slice.actions;
+export const { newMessage } = slice.actions;
 export default slice.reducer;

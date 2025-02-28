@@ -11,9 +11,9 @@ import { setUser } from "../reducers/usersReducer";
 
 function App() {
 
+  const { blockSending } = useSelector(state => state.usersReducer);
   const { channelsLoading } = useSelector(state => state.channelsReducer);
-  const { messagesLoading } = useSelector(state => state.messagesReducer);
-  const { authProcess } = useSelector(state => state.usersReducer);
+  const { messagesLoading  } = useSelector(state => state.messagesReducer);
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ function App() {
       </Route>
     </Routes>
 
-    { channelsLoading || messagesLoading || authProcess ?
+    { blockSending || messagesLoading || channelsLoading ?
     <LoadSpinner />
     :
     null

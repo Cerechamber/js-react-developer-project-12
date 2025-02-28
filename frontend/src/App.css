@@ -24,6 +24,15 @@
   z-index: 100;
 }
 
+[data-mess="true"] {
+  animation: appear ease-in .5s;
+}
+
+@keyframes appear {
+  0%   {opacity: 0;}
+  100% {opacity: 1;}
+}
+
 .spinner-popup .spinner-grow {
   transform: scale(1.5);
 }
