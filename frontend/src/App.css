@@ -17,6 +17,17 @@
   margin-left: 20px;
 }
 
+.spinner-popup {
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0,.5);
+  z-index: 100;
+}
+
+.spinner-popup .spinner-grow {
+  transform: scale(1.5);
+}
+
 @media (max-width: 565px) {
   .auth__img {
     max-height: 18vh;

@@ -27,7 +27,7 @@ const Chat = ({dispatch}) => {
       dispatch(setChannels(token));
       dispatch(setMessages(token));
     }
-  },[token])
+  },[token]);
 
   useEffect(() => {
     if (firstLoadChannels && firstLoadMessages) {

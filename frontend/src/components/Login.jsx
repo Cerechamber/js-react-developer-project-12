@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { getAuth } from "../contexts/AuthProvider";
 import tunnel from "../assets/tunnel.png";
 import { useTranslation } from 'react-i18next';
-import { changeBlockSending } from "../reducers/usersReducer";
+import { changeBlockSending, changeAuthProcess } from "../reducers/usersReducer";
 import {
   Button,
   Row,
@@ -60,6 +60,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                       validationSchema={AuthSchema}
                       onSubmit={(values)=>{
                         dispatch(changeBlockSending(true));
+                        dispatch(changeAuthProcess(true));
                         const userData = async () => {
                           const data = await authUser(values.nick, values.password);
                           if (data.token) {
@@ -69,6 +70,7 @@ const { blockSending } = useSelector(state => state.usersReducer);
                             localStorage.setItem("userName", data.username);
                             values.nick = '';
                             values.password = '';
+                            dispatch(changeAuthProcess(false));
                             navigate("/", { replace: false });
                           } else if (data !== 'no-connection') {
                             setError(true);

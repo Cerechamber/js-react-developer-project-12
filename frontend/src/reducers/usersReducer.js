@@ -4,6 +4,7 @@ const initialState = {
   username: "",
   token: "",
   blockSending: false,
+  authProcess: false,
 };
 
 const slice = createSlice({
@@ -16,9 +17,12 @@ const slice = createSlice({
     },
     changeBlockSending(state, { payload }) {
       state.blockSending = payload;
+    },
+    changeAuthProcess(state, { payload }) {
+      state.authProcess = payload;
     }
   },
 });
 
-export const { setUser, changeBlockSending } = slice.actions;
+export const { setUser, changeBlockSending, changeAuthProcess } = slice.actions;
 export default slice.reducer;

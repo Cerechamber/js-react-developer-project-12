@@ -19,7 +19,7 @@ await i18n
   .init({
     resources,
     debug: true,
-    fallbackLng: 'en',
+    fallbackLng: 'ru',
     interpolation: {
       escapeValue: false,
     },

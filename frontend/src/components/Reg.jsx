@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import * as Yup from "yup";
 import { getAuth } from "../contexts/AuthProvider";
 import { useTranslation } from 'react-i18next';
-import { changeBlockSending } from "../reducers/usersReducer";
+import { changeBlockSending, changeAuthProcess } from "../reducers/usersReducer";
 import tunnel from "../assets/tunnel2.png";
 import {
   Button,
@@ -70,6 +70,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                         validationSchema={SignupSchema}
                         onSubmit={(values) => {
                           dispatch(changeBlockSending(true));
+                          dispatch(changeAuthProcess(true));
                           const userData = async () => {
                             const data = await regUser(values.nick, values.password);
                             if (data.token) {
@@ -80,6 +81,7 @@ const Reg = ({ dispatch, setUser, navigate }) => {
                             values.nick = '';
                             values.password = '';
                             values.passwordConfirm = '';
+                            dispatch(changeAuthProcess(false));
                             navigate("/", { replace: false });
                             } else if (data !== 'no-connection') {
                               setError(true);

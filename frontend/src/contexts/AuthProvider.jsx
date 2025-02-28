@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
 import { useToast } from "./ToastProvider";
-import { setUser, changeBlockSending } from "../reducers/usersReducer";
+import { setUser, changeBlockSending, changeAuthProcess } from "../reducers/usersReducer";
 
 const AuthContext = createContext({});
 
@@ -39,12 +39,12 @@ const AuthProvider = ({ children }) => {
              return response.data;
            })
            .catch(function (err) {
-            if (err.status === 409) {
               dispatch(changeBlockSending(false));
+              dispatch(changeAuthProcess(false));
+            if (err.status === 409) {
               return err
             } else {
               notify(t('notify.errorLoading'));
-              dispatch(changeBlockSending(false));
               return 'no-connection';
             }
             });
@@ -55,12 +55,12 @@ const AuthProvider = ({ children }) => {
              return response.data;
            })
            .catch(function (err) {
-            if (err.status === 401) {
               dispatch(changeBlockSending(false));
+              dispatch(changeAuthProcess(false));
+            if (err.status === 401) {
               return err
             } else {
               notify(t('notify.errorLoading'));
-              dispatch(changeBlockSending(false));
               return 'no-connection';
             }
            });

@@ -7,6 +7,7 @@ const initialState = {
     initiator: false,
     firstLoadChannels: false,
     errorLoadChannels: false,
+    channelsLoading: false,
   };
 
   export const setChannels = createAsyncThunk(
@@ -51,13 +52,17 @@ const initialState = {
       },
     },
     extraReducers: (builder) => {
-      builder.addCase(setChannels.fulfilled, (state, { payload }) => {
+      builder.addCase(setChannels.pending, (state, { payload }) => {
+        state.channelsLoading = true;
+      }).addCase(setChannels.fulfilled, (state, { payload }) => {
         state.channels = payload;
         state.activeChannel = payload[0];
         state.firstLoadChannels = true;
         state.errorLoadChannels = false;
+        state.channelsLoading = false;
       }).addCase(setChannels.rejected, (state, { payload }) => {
             state.errorLoadChannels = true;
+            state.channelsLoading = false;
       })
     }
   });

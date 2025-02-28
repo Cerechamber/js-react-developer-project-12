@@ -6,6 +6,7 @@ const initialState = {
   messages: {},
   firstLoadMessages: false,
   errorLoadMessages: false,
+  messagesLoading: false,
 };
 
 export const setMessages = createAsyncThunk(
@@ -26,12 +27,16 @@ const slice = createSlice({
   },
   },
   extraReducers: (builder) => {
-    builder.addCase(setMessages.fulfilled, (state, { payload }) => {
+    builder.addCase(setMessages.pending, (state, { payload }) => {
+      state.messagesLoading = true;
+    }).addCase(setMessages.fulfilled, (state, { payload }) => {
       state.messages = payload;
       state.firstLoadMessages = true;
       state.errorLoadMessages = false;
+      state.messagesLoading = false;
     }).addCase(setMessages.rejected, (state, { payload }) => {
          state.errorLoadMessages = true;
+         state.messagesLoading = false;
     }).addCase(removeChannel, (state, { payload }) => {
       const newMessages = state.messages.filter(m => m.channelId !== payload.id);
       state.messages = newMessages;
