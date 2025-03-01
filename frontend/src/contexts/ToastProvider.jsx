@@ -1,7 +1,12 @@
 import { createContext, useContext, useMemo } from "react";
 import { toast } from 'react-toastify';
+import * as leoProfanity from 'leo-profanity';
 
 const ToastContext = createContext({});
+
+const ruDictionary = leoProfanity.getDictionary('ru');
+const enDictionary = leoProfanity.getDictionary('en');
+leoProfanity.add(ruDictionary, enDictionary);
 
 const ToastProvider = ({children}) => {
     
@@ -11,14 +16,19 @@ const ToastProvider = ({children}) => {
             return
         }
         toast.info(text);
-    } 
+    }
 
-    const toastActions = useMemo(() => ({
-        notify
+    const profanityNo = (text) => {
+        return leoProfanity.clean(text);
+    }
+
+    const helperActions = useMemo(() => ({
+        notify,
+        profanityNo
     }),[]);
 
     return (
-        <ToastContext.Provider value={toastActions}>
+        <ToastContext.Provider value={helperActions}>
             {children}
         </ToastContext.Provider>
     )

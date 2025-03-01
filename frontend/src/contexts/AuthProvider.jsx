@@ -10,7 +10,7 @@ const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
 
-  const { notify } = useToast();
+  const { notify, profanityNo } = useToast();
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ const AuthProvider = ({ children }) => {
 
     const regUser = (name, password) => {
         return axios.post('/api/v1/signup', { username: name, password: password }).then((response) => {
+             response.data.username = profanityNo(response.data.username);
              return response.data;
            })
            .catch(function (err) {

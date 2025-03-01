@@ -12,12 +12,12 @@ const ChatContext = createContext({});
 const ChatProvider = ({socket, children}) => {
 
     const dispatch = useDispatch();
-    const { notify } = useToast();
+    const { notify, profanityNo } = useToast();
 
     const { t } = useTranslation();
     
     useEffect(() => {
-        socket.on('newMessage', (payload) => { 
+        socket.on('newMessage', (payload) => {
             dispatch(newMessage(payload));
             dispatch(changeBlockSending(false));
           });
@@ -42,6 +42,7 @@ const ChatProvider = ({socket, children}) => {
     },[])
   
    const setMessage = (token, message) => {
+    message.body = profanityNo(message.body);
     return axios.post('/api/v1/messages', message, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -54,6 +55,7 @@ const ChatProvider = ({socket, children}) => {
   };
   
    const setChannel = (token, newChannel) => {
+    newChannel.name = profanityNo(newChannel.name);
     return axios.post('/api/v1/channels', newChannel, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,6 +68,7 @@ const ChatProvider = ({socket, children}) => {
   };
   
    const editChannel = (token, editedChannel, id) => {
+    editedChannel.name = profanityNo(editedChannel.name);
   axios.patch(`/api/v1/channels/${id}`, editedChannel, {
     headers: {
       Authorization: `Bearer ${token}`,
